@@ -1,0 +1,16 @@
+server:
+  port: 9090
+spring:
+  application:
+    name: auth-service
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:mysql://127.0.0.1:3306/users
+    username: sa
+    password:
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      ddl-auto: create

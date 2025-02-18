@@ -1,0 +1,13 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql-ramos
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      TZ: Asia/Seoul
+    ports:
+      - 3306:3306
+    platform: linux/x86_64
+
+
