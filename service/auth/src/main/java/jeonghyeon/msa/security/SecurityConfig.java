@@ -38,11 +38,12 @@ public class SecurityConfig {
         http
                 .formLogin(auth -> auth.disable())
                 .csrf(csrf -> csrf.disable())
+                .httpBasic((auth) -> auth.disable())
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers(HttpMethod.POST, "/api/auth/user", "/api/auth/login").permitAll()
+                        auth.requestMatchers("/", "/login", "/api/auth/user", "/api/auth/reissue").permitAll()
                                 .anyRequest().authenticated()
                 )
-                .addFilterAt(new JwtTokenFilter(jwtTokenUtil), JwtAuthenticationFilter.class)
+                .addFilterBefore(new JwtTokenFilter(jwtTokenUtil), JwtAuthenticationFilter.class)
                 .addFilterAt(new JwtAuthenticationFilter(authenticationManager(), jwtTokenUtil), UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         ;
