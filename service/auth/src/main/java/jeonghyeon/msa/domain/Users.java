@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.Arrays;
+
 
 @Getter
 @Entity(name = "users")
@@ -40,4 +42,13 @@ public class Users extends BaseTimeEntity {
         return new Users(usersId, username, password, "관리자", UsersRole.ADMIN);
     }
 
+    public static Users login(Long usersId, String username, String role) {
+        return new Users(
+                usersId,
+                username,
+                "",
+                "",
+                Arrays.stream(UsersRole.values()).filter(usersRole -> usersRole.name().equals(role)).findFirst().get()
+        );
+    }
 }

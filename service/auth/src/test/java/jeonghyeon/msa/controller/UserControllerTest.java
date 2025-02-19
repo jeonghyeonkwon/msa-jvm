@@ -1,18 +1,16 @@
 package jeonghyeon.msa.controller;
 
-import jeonghyeon.msa.dto.request.UsersDto;
+import jeonghyeon.msa.dto.request.RegisterDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.client.RestClient;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 
 class UserControllerTest {
-    RestClient restClient = RestClient.create("http://localhost:9090");
+    RestClient restClient = RestClient.create("http://localhost:9090/api/auth");
 
     @Test
     void register(){
-        UsersDto dto = new UsersDto("givejeong","1234","nickname");
+        RegisterDto dto = new RegisterDto("givejeong","1234","nickname");
 
         String body = restClient.post()
                 .uri("/user")
