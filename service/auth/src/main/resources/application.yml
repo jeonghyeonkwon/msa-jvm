@@ -13,6 +13,10 @@ spring:
     open-in-view: false
     show-sql: true
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
+  data:
+    redis:
+      host: localhost
+      port: 6379
 jwt:
   secret: b50bdca46a03358e4b96221fe8531f5106fd3a74fc8fa659972bfeba2274fdf3
