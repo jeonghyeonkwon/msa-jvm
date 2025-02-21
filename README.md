@@ -1,8 +1,9 @@
 # MSA-JVM
 
-## db 실행
-```shell
+## 도커 실행
 
-docker-compose up 
+```shell
+docker docker-compose
+
 
 ```
