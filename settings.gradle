@@ -3,6 +3,8 @@ rootProject.name = 'msa-jvm'
 
 include 'common'
 include 'common:snowflake'
+include 'common:data-serializer'
+include 'common:event'
 include 'service'
 include 'service:auth'
 include 'service:memo-service'

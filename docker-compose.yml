@@ -12,9 +12,13 @@ services:
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
   redis:
-    image: redis:latest
+    image: redis:7.4.2
     container_name: redis-jvm
     ports:
       - 6379:6379
-
+  kafka:
+    image: apache/kafka:3.8.0
+    container_name: kafka-jvm
+    ports:
+      - 9092:9092
 
