@@ -18,8 +18,8 @@ public class PrincipalDetailService implements UserDetailsService {
         System.out.println("username : " + username);
         Users users = userRepository.findByUsername(username)
                 .orElseThrow(
-                () -> new UsernameNotFoundException("사용자를 찾을 수 없습니다")
-        );
+                        () -> new UsernameNotFoundException("사용자를 찾을 수 없습니다")
+                );
         return new PrincipalUserDetails(users);
     }
 }

@@ -13,6 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -23,9 +25,12 @@ public class UserService {
 
     @Transactional
     public Long register(RegisterDto dto) {
-        System.out.println("1");
+
+
         usersRepository.findByUsername(dto.getUsername()).ifPresent(
-                notUsed -> new IllegalArgumentException("해당 아이디는 존재합니다.")
+                notUsed -> {
+                    throw new IllegalArgumentException("해당 아이디는 존재합니다.");
+                }
         );
 
         System.out.println("2");
