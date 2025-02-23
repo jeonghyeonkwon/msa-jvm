@@ -6,7 +6,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jeonghyeon.msa.auth.dto.response.ErrorMessage;
+import jeonghyeon.msa.auth.exception.ErrorResult;
 import jeonghyeon.msa.auth.domain.Users;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -64,7 +64,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             ObjectMapper om = new ObjectMapper();
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.getWriter().write(om.writeValueAsString(new ErrorMessage("토큰 만료되었습니다.")));
+            response.getWriter().write(om.writeValueAsString(new ErrorResult("토큰 만료되었습니다.")));
         }
 
         String category = jwtTokenUtil.getCategory(accessToken);
@@ -72,7 +72,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             ObjectMapper om = new ObjectMapper();
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.getWriter().write(om.writeValueAsString(new ErrorMessage("유효하지 않은 토큰입니다.")));
+            response.getWriter().write(om.writeValueAsString(new ErrorResult("유효하지 않은 토큰입니다.")));
         }
 
         Long usersId = jwtTokenUtil.getUsersId(accessToken);

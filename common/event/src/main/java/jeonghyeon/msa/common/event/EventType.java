@@ -24,6 +24,6 @@ public enum EventType {
     }
 
     public static class Topic {
-        private static final String AUTH_CREATE = "auth-users";
+        public static final String AUTH_CREATE = "auth-users";
     }
 }

@@ -7,7 +7,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jeonghyeon.msa.auth.dto.request.LoginDto;
-import jeonghyeon.msa.auth.dto.response.ErrorMessage;
+import jeonghyeon.msa.auth.exception.ErrorResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -100,7 +100,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         ObjectMapper om = new ObjectMapper();
 
         if (failed instanceof BadCredentialsException) {
-            String result = om.writeValueAsString(new ErrorMessage("비밀번호가 맞지 않음"));
+            String result = om.writeValueAsString(new ErrorResult("비밀번호가 맞지 않음"));
             response.getWriter().write(result);
         }
     }

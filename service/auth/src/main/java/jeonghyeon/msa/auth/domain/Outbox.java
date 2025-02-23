@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "outbox")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-
 public class Outbox extends BaseTimeEntity {
     @Id
     private Long outboxId;

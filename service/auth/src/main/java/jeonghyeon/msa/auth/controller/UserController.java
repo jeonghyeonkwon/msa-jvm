@@ -4,7 +4,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jeonghyeon.msa.auth.dto.response.ErrorMessage;
+import jeonghyeon.msa.auth.exception.ErrorResult;
 import jeonghyeon.msa.auth.dto.request.RegisterDto;
 import jeonghyeon.msa.auth.security.JwtTokenUtil;
 import jeonghyeon.msa.auth.security.RedisRepository;
@@ -42,16 +42,16 @@ public class UserController {
         }
 
         if (refreshToken == null) {
-            return new ResponseEntity<>(new ErrorMessage("refresh Token이 없습니다"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ErrorResult("refresh Token이 없습니다"), HttpStatus.BAD_REQUEST);
         }
 
         try {
             jwtTokenUtil.isExpired(refreshToken);
             if (!redisRepository.isExist(refreshToken)) {
-                return new ResponseEntity<>(new ErrorMessage("refreshToken이 만료되었습니다."), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(new ErrorResult("refreshToken이 만료되었습니다."), HttpStatus.BAD_REQUEST);
             }
         } catch (ExpiredJwtException e) {
-            return new ResponseEntity<>(new ErrorMessage("refreshToken이 만료되었습니다."), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ErrorResult("refreshToken이 만료되었습니다."), HttpStatus.BAD_REQUEST);
         }
 
         redisRepository.delete(refreshToken);
@@ -83,7 +83,7 @@ public class UserController {
             }
         }
         if (refreshToken == null) {
-            return new ResponseEntity<>(new ErrorMessage("refresh Token이 없습니다"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ErrorResult("refresh Token이 없습니다"), HttpStatus.BAD_REQUEST);
         }
 
         redisRepository.delete(refreshToken);
