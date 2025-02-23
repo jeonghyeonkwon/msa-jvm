@@ -2,8 +2,10 @@ package jeonghyeon.msa.common.event;
 
 import jeonghyeon.msa.common.DataSerializer;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class Event<T extends EventPayload> {
     private Long eventId;
     private EventType type;
@@ -29,9 +31,13 @@ public class Event<T extends EventPayload> {
         }
 
         Event<EventPayload> event = new Event<>();
+        System.out.println("1");
         event.eventId = eventRaw.getEventId();
+        System.out.println("2");
         event.type = EventType.from(eventRaw.getType());
+        System.out.println("3");
         event.payload = DataSerializer.deserialize(eventRaw.getPayload(), event.type.getPayloadClass());
+        System.out.println("4");
         return event;
     }
     @Getter

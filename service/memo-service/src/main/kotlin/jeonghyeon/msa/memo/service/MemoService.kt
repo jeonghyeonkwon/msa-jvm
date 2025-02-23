@@ -22,7 +22,7 @@ class MemoService(
     private val snowflake: Snowflake = Snowflake()
 
     @Transactional
-    fun createUser(usersDto: UsersDto): Unit {
+    fun createUser(usersDto: UsersDto) {
         val savedUser = usersRepository.save(Users(usersDto.usersId, usersDto.username))
 
         memoRepository.save(
