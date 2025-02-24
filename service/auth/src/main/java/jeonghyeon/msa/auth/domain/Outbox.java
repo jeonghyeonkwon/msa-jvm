@@ -7,10 +7,12 @@ import jeonghyeon.msa.common.event.EventType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
 @Entity
 @Table(name = "outbox")
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Outbox extends BaseTimeEntity {
     @Id

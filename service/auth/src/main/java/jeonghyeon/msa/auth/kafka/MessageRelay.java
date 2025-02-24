@@ -1,15 +1,20 @@
 package jeonghyeon.msa.auth.kafka;
 
 import jeonghyeon.msa.auth.domain.Outbox;
+import jeonghyeon.msa.auth.domain.OutboxType;
 import jeonghyeon.msa.auth.repository.OutboxRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
@@ -40,10 +45,27 @@ public class MessageRelay {
                     outbox.getPayload()
             ).get();
             Outbox finish = outbox.finish();
-            log.info("status : {}",finish.getOutboxType());
+            log.info("status : {}", finish.getOutboxType());
             outboxRepository.save(finish);
         } catch (Exception e) {
             log.error("[MessageRelay.publishEvent] outbox={}", outbox, e);
+        }
+    }
+
+    @Scheduled(
+            fixedDelay = 10,
+            initialDelay = 5,
+            timeUnit = TimeUnit.SECONDS,
+            scheduler = "messageRelayPublishPendingEventExecutor"
+    )
+    public void publishPendingEvent() {
+        List<Outbox> outboxs = outboxRepository.findByCreatedAtLessThanEqualsOrderByCreatedAtAsc(
+                OutboxType.READY,
+                LocalDateTime.now().minusSeconds(10),
+                Pageable.ofSize(100)
+        );
+        for (Outbox outbox : outboxs) {
+            publishEvent(outbox);
         }
     }
 }

@@ -48,7 +48,7 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public Executor messageReplayPublishPendingEventExecutor() {
-        return Executors.newSingleThreadExecutor();
+    public Executor messageRelayPublishPendingEventExecutor() {
+        return Executors.newSingleThreadScheduledExecutor();
     }
 }
