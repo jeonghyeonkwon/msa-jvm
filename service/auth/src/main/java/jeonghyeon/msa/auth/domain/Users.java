@@ -26,7 +26,7 @@ public class Users extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private UsersRole usersRole;
 
-    private Users(Long usersId, String username, String password, String nickName, UsersRole usersRole) {
+    public Users(Long usersId, String username, String password, String nickName, UsersRole usersRole) {
         this.usersId = usersId;
         this.username = username;
         this.password = password;

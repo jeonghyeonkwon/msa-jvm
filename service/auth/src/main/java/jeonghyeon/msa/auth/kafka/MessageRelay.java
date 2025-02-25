@@ -43,7 +43,7 @@ public class MessageRelay {
                     outbox.getEventType().getTopic(),
                     String.valueOf(1),
                     outbox.getPayload()
-            ).get();
+            ).get(1, TimeUnit.SECONDS);
             Outbox finish = outbox.finish();
             log.info("status : {}", finish.getOutboxType());
             outboxRepository.save(finish);
