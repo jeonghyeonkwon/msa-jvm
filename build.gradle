@@ -6,6 +6,11 @@ plugins {
 
 group = 'jvm'
 version = '1'
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
 
 allprojects {
     repositories {
@@ -34,4 +39,5 @@ allprojects {
     tasks.named('test') {
         useJUnitPlatform()
     }
+
 }

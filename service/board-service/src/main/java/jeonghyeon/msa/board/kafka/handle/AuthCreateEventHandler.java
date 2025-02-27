@@ -7,7 +7,6 @@ import jeonghyeon.msa.common.event.EventType;
 import jeonghyeon.msa.common.event.payload.AuthCreateEventPayload;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -15,7 +14,6 @@ public class AuthCreateEventHandler implements EventHandler<AuthCreateEventPaylo
     private final UsersRepository usersRepository;
 
     @Override
-    @Transactional
     public void handle(Event<AuthCreateEventPayload> event) {
         AuthCreateEventPayload payload = event.getPayload();
 

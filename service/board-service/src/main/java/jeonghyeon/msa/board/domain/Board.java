@@ -30,6 +30,9 @@ public class Board extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private BoardStatus boardStatus;
 
+    private Long viewCount;
+
+
     public Board(Long boardId, String title, String content, BoardStatus boardStatus, Users users) {
         users.createBoard(this);
         this.boardId = boardId;
@@ -37,9 +40,16 @@ public class Board extends BaseTimeEntity {
         this.content = content;
         this.boardStatus = boardStatus;
         this.users = users;
+        this.viewCount = 0L;
+    }
+
+    public void updateViewCount(Long viewCount) {
+        this.viewCount = viewCount;
     }
 
     protected void createComment(Comment comment) {
         this.comments.add(comment);
     }
+
+
 }

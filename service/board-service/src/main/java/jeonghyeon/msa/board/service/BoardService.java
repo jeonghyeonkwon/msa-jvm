@@ -8,6 +8,7 @@ import jeonghyeon.msa.board.domain.Users;
 import jeonghyeon.msa.board.dto.request.BoardRequest;
 import jeonghyeon.msa.board.dto.request.CommentRequest;
 import jeonghyeon.msa.board.dto.request.UsersRequest;
+import jeonghyeon.msa.board.dto.response.BoardDetailResponse;
 import jeonghyeon.msa.board.dto.response.CommentResponse;
 import jeonghyeon.msa.board.kafka.handle.EventHandler;
 import jeonghyeon.msa.board.repository.BoardRepository;
@@ -35,8 +36,8 @@ public class BoardService {
 
     @Transactional
     public void handleEvent(Event<EventPayload> event) {
-        for (EventHandler eventHandler : eventHandlers){
-            if(eventHandler.supports(event)){
+        for (EventHandler eventHandler : eventHandlers) {
+            if (eventHandler.supports(event)) {
                 eventHandler.handle(event);
             }
         }
@@ -84,6 +85,21 @@ public class BoardService {
         );
     }
 
+    @Transactional
+    public BoardDetailResponse getBoardDetail(Long boardId) {
+        BoardDetailResponse board = boardRepository.getBoardDetail(boardId);
 
+        return board;
+    }
+
+
+    public BoardDetailResponse getBoardDetailAndViewCount(Long boardId) {
+        BoardDetailResponse board = boardRepository.getBoardDetailAndViewCount(boardId);
+        return board;
+    }
+
+    public void updateViewCount(Long boardId, Long count) {
+        boardRepository.updateViewCount(boardId,count);
+    }
 
 }

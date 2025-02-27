@@ -1,10 +1,7 @@
 package jeonghyeon.msa.board.domain;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,9 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Table(name = "users")
+@Table(name = "users",indexes = @Index(name="idx_username",columnList = "username"))
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+
 public class Users extends BaseTimeEntity {
     @Id
     private Long usersId;
