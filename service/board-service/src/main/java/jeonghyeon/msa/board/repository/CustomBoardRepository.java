@@ -12,5 +12,4 @@ public interface CustomBoardRepository {
 
     List<BoardResponse> findList(Long offset, Long limit);
 
-    Long count(int limit);
 }

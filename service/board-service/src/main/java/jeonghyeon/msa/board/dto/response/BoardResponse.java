@@ -3,10 +3,12 @@ package jeonghyeon.msa.board.dto.response;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @Data
+@ToString
 public class BoardResponse {
     private Long boardId;
     private String title;

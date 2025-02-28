@@ -13,4 +13,13 @@ public interface BoardRepository extends JpaRepository<Board, Long>, CustomBoard
     @Query("UPDATE Board b SET b.viewCount = :count WHERE b.boardId = :boardId")
     @Modifying
     int updateViewCount(@Param("boardId") Long boardId, @Param("count") Long count);
+
+
+    @Query(
+            value = "SELECT COUNT(*) FROM (" +
+                    "   SELECT board_id FROM board LIMIT :limit" +
+                    ") T",
+            nativeQuery = true)
+    Long count(@Param("limit") Long limit);
+
 }

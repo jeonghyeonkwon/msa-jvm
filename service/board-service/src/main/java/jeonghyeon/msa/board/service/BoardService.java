@@ -9,15 +9,19 @@ import jeonghyeon.msa.board.dto.request.BoardRequest;
 import jeonghyeon.msa.board.dto.request.CommentRequest;
 import jeonghyeon.msa.board.dto.request.UsersRequest;
 import jeonghyeon.msa.board.dto.response.BoardDetailResponse;
+import jeonghyeon.msa.board.dto.response.BoardResponse;
 import jeonghyeon.msa.board.dto.response.CommentResponse;
+import jeonghyeon.msa.board.dto.response.PageResponse;
 import jeonghyeon.msa.board.kafka.handle.EventHandler;
 import jeonghyeon.msa.board.repository.BoardRepository;
 import jeonghyeon.msa.board.repository.CommentRepository;
 import jeonghyeon.msa.board.repository.UsersRepository;
+import jeonghyeon.msa.board.util.PageLimitCalculator;
 import jeonghyeon.msa.common.Snowflake;
 import jeonghyeon.msa.common.event.Event;
 import jeonghyeon.msa.common.event.EventPayload;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -99,7 +103,19 @@ public class BoardService {
     }
 
     public void updateViewCount(Long boardId, Long count) {
-        boardRepository.updateViewCount(boardId,count);
+        boardRepository.updateViewCount(boardId, count);
     }
 
+    public PageResponse getBoards(Pageable pageable) {
+        Long pageSize = Long.valueOf(pageable.getPageSize());
+        Long pageNumber = Long.valueOf(pageable.getPageNumber());
+
+        List<BoardResponse> list = boardRepository.findList(pageNumber * pageSize, pageSize);
+        Long count = boardRepository.count(
+                PageLimitCalculator.calculatePageLimit(pageNumber, pageSize, 10L)
+        );
+        return new PageResponse<BoardResponse>(pageNumber, pageSize, list, count, 10L);
+
+
+    }
 }
