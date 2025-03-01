@@ -1,5 +1,6 @@
 package jeonghyeon.msa.board.dto.response;
 
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -12,6 +13,7 @@ public class CommentResponse {
     private String content;
     private LocalDateTime createdDate;
 
+    @QueryProjection
     public CommentResponse(Long commentId, Long usersId, String username, String content, LocalDateTime createdDate) {
         this.commentId = commentId;
         this.usersId = usersId;

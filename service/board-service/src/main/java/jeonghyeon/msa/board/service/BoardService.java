@@ -118,4 +118,15 @@ public class BoardService {
 
 
     }
+
+    public PageResponse getComments(Long boardId, Pageable pageable) {
+        Long pageSize = Long.valueOf(pageable.getPageSize());
+        Long pageNumber = Long.valueOf(pageable.getPageNumber());
+
+        List<CommentResponse> list = commentRepository.findList(boardId, pageNumber * pageSize, pageSize);
+        Long count = boardRepository.count(
+                PageLimitCalculator.calculatePageLimit(pageNumber, pageSize, 10L)
+        );
+        return new PageResponse<CommentResponse>(pageNumber, pageSize, list, count, 10L);
+    }
 }

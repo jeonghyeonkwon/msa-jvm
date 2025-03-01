@@ -1,11 +1,6 @@
 package jeonghyeon.msa.board.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
-import jakarta.persistence.TypedQuery;
-import jeonghyeon.msa.board.domain.Board;
 import jeonghyeon.msa.board.dto.response.BoardDetailResponse;
 import jeonghyeon.msa.board.dto.response.BoardResponse;
 import jeonghyeon.msa.board.dto.response.QBoardDetailResponse;
@@ -22,7 +17,7 @@ import static jeonghyeon.msa.board.domain.QUsers.users;
 
 @Repository
 @RequiredArgsConstructor
-public class CustomBoardRepositoryImpl implements CustomBoardRepository {
+public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
 

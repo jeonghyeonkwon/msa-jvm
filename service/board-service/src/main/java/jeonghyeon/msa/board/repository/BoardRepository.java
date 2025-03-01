@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BoardRepository extends JpaRepository<Board, Long>, CustomBoardRepository {
+public interface BoardRepository extends JpaRepository<Board, Long>, BoardRepositoryCustom {
 
     @Query("UPDATE Board b SET b.viewCount = :count WHERE b.boardId = :boardId")
     @Modifying

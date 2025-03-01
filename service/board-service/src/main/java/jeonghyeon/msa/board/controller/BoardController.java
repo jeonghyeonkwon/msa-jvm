@@ -3,15 +3,13 @@ package jeonghyeon.msa.board.controller;
 
 import jeonghyeon.msa.board.dto.request.BoardRequest;
 import jeonghyeon.msa.board.dto.response.BoardDetailResponse;
-import jeonghyeon.msa.board.dto.response.BoardResponse;
+import jeonghyeon.msa.board.dto.response.PageResponse;
 import jeonghyeon.msa.board.facade.BoardFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,9 +24,9 @@ public class BoardController {
     }
 
     @GetMapping("/boards")
-    public ResponseEntity getBoards(Pageable pageable){
-        List<BoardResponse> boards = boardFacade.getBoards(pageable);
-        return null;
+    public ResponseEntity getBoards(Pageable pageable) {
+        PageResponse boards = boardFacade.getBoards(pageable);
+        return new ResponseEntity(boards, HttpStatus.OK);
     }
 
     @GetMapping("/boards/{boardId}")
@@ -38,8 +36,9 @@ public class BoardController {
     }
 
     @GetMapping("/boards/{boardId}/comments")
-    public ResponseEntity getCommentList(@PathVariable Long boardId){
-        return null;
+    public ResponseEntity getComments(@PathVariable Long boardId, Pageable pageable) {
+        PageResponse comments = boardFacade.getComments(boardId, pageable);
+        return new ResponseEntity(comments, HttpStatus.OK);
     }
 
 }

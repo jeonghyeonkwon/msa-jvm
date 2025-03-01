@@ -87,6 +87,32 @@ class BoardRepositoryTest {
         PageResponse<BoardResponse> page = new PageResponse<>(pageNumber, pageSize, list, count, 10L);
         System.out.println(page);
     }
+    @Test
+    void page2(){
+        Long pageSize = 10L;
+        Long pageNumber = 9L;
+
+        List<BoardResponse> list = boardRepository.findList(pageNumber * pageSize, pageSize);
+        Long count = boardRepository.count(
+                PageLimitCalculator.calculatePageLimit(pageNumber, pageSize, 10L)
+        );
+        System.out.println(count);
+        PageResponse<BoardResponse> page = new PageResponse<>(pageNumber, pageSize, list, count, 10L);
+        System.out.println(page);
+    }
+    @Test
+    void page3(){
+        Long pageSize = 10L;
+        Long pageNumber = 11L;
+
+        List<BoardResponse> list = boardRepository.findList(pageNumber * pageSize, pageSize);
+        Long count = boardRepository.count(
+                PageLimitCalculator.calculatePageLimit(pageNumber, pageSize, 10L)
+        );
+        System.out.println(count);
+        PageResponse<BoardResponse> page = new PageResponse<>(pageNumber, pageSize, list, count, 10L);
+        System.out.println(page);
+    }
 
 
 }

@@ -5,7 +5,7 @@ import jeonghyeon.msa.board.dto.response.BoardResponse;
 
 import java.util.List;
 
-public interface CustomBoardRepository {
+public interface BoardRepositoryCustom {
     BoardDetailResponse getBoardDetail(Long boardId);
 
     BoardDetailResponse getBoardDetailAndViewCount(Long boardId);

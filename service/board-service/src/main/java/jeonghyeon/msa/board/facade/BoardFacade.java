@@ -3,16 +3,14 @@ package jeonghyeon.msa.board.facade;
 import jeonghyeon.msa.board.dto.request.BoardRequest;
 import jeonghyeon.msa.board.dto.request.CommentRequest;
 import jeonghyeon.msa.board.dto.response.BoardDetailResponse;
-import jeonghyeon.msa.board.dto.response.BoardResponse;
 import jeonghyeon.msa.board.dto.response.CommentResponse;
+import jeonghyeon.msa.board.dto.response.PageResponse;
 import jeonghyeon.msa.board.repository.redis.ViewCountRepository;
 import jeonghyeon.msa.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -60,7 +58,11 @@ public class BoardFacade {
 
     }
 
-    public List<BoardResponse> getBoards(Pageable pageable) {
-        return null;
+    public PageResponse getBoards(Pageable pageable) {
+        return boardService.getBoards(pageable);
+    }
+
+    public PageResponse getComments(Long boardId, Pageable pageable) {
+        return boardService.getComments(boardId, pageable);
     }
 }

@@ -9,6 +9,7 @@ import jeonghyeon.msa.board.repository.UsersRepository;
 import jeonghyeon.msa.common.Snowflake;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -40,6 +41,7 @@ public class DataInitializer {
     static final int EXECUTE_COUNT = 6000;
 
     @BeforeEach
+    @Disabled
     void init() {
         users = new Users(snowflake.nextId(), "givejeong");
         transactionTemplate.executeWithoutResult(
@@ -50,6 +52,7 @@ public class DataInitializer {
     }
 
     @Test
+    @Disabled
     void initialize() throws InterruptedException {
         ExecutorService executorService = Executors.newFixedThreadPool(10);
 

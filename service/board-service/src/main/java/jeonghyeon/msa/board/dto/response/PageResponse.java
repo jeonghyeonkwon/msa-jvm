@@ -17,17 +17,35 @@ public class PageResponse<T> {
     private Long totalPage;
     private List<T> list;
 
-    // 10 page -> 요청은 11 page
-    // 0...9, 10 ... 19, 20 ... 29
-    // 1...10, 11... 20, 21 ... 30
+    // 프론트에서 page - 1 해서 백엔드 보내야됨
+
+    // page = 10
+
+    // 프론트에서 1...10, 11... 20, 21 ... 30
+    // 백엔드 0...9, 10 ... 19, 20 ... 29
+
+    // count = 101
+    // totalPage = 101 / 10 + 1 = 11
+    // startBlockPage = 0 / 10 * 10 = 0
+    // endBlockPage = Math.min(9, 11)
+
+    // count = 5
+    // totalPage = 5 / 10 + 1 = 1
+    // startBlockPage = 0 / 10 * 10 = 0
+    // endBlockPage = Math.min(9, 0)
+
 
     public PageResponse(Long currentPage, Long pageSize, List<T> list, Long count, Long pageBlock) {
         this.currentPage = currentPage;
-        this.totalPage = count / pageSize + 1;
-        this.startBlockPage = (currentPage / pageBlock) * pageBlock + 1;
+        this.totalPage = count / pageSize;
+        this.startBlockPage = (currentPage / pageBlock) * pageBlock;
         this.endBlockPage = Math.min(this.startBlockPage + pageBlock - 1, this.totalPage);
         this.isFirst = this.startBlockPage / pageBlock != 0 ? true : false;
-        this.isLast = endBlockPage * pageBlock < count ? true : false;
+        this.isLast = (this.startBlockPage + pageBlock - 1) * pageBlock < count ? true : false;
+
+        // 0 < 5
+
+
         this.list = list;
     }
 }
