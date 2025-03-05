@@ -7,8 +7,12 @@ import jeonghyeon.msa.memo.domain.Memo
 import jeonghyeon.msa.memo.domain.Users
 import jeonghyeon.msa.memo.dto.request.MemoDto
 import jeonghyeon.msa.memo.dto.request.UsersDto
+import jeonghyeon.msa.memo.dto.response.PageResponse
 import jeonghyeon.msa.memo.repository.MemoRepository
 import jeonghyeon.msa.memo.repository.UsersRepository
+import jeonghyeon.msa.memo.repository.mapper.MemoMapper
+import jeonghyeon.msa.memo.util.PageLimitCalculator
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
@@ -17,7 +21,8 @@ import java.time.format.DateTimeFormatter
 @Service
 class MemoService(
     private val memoRepository: MemoRepository,
-    private val usersRepository: UsersRepository
+    private val usersRepository: UsersRepository,
+    private val memoMapper: MemoMapper
 ) {
     private val snowflake: Snowflake = Snowflake()
 
@@ -53,4 +58,18 @@ class MemoService(
 
         return saved.id;
     }
+
+    fun getMemos(usersId: Long, pageable: Pageable): PageResponse<MemoDto> {
+        val pageNumber = pageable.pageNumber.toLong()
+        val pageSize = pageable.pageSize.toLong()
+        val count = memoMapper.count(
+            usersId,
+            PageLimitCalculator.calculatePageLimit(pageNumber, pageSize, 10L)
+        )
+        val memos: List<MemoDto> = memoMapper.getMemos(usersId, pageNumber * pageSize, pageSize)
+
+        return PageResponse<MemoDto>(pageNumber, pageSize, memos, count, 10L)
+    }
+
+
 }

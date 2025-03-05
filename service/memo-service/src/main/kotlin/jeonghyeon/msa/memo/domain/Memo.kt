@@ -15,6 +15,7 @@ class Memo(
     var endDate: LocalDateTime,
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "users_id")
     val users: Users
 
 ) : BaseTimeEntity() {
