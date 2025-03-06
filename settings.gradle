@@ -6,6 +6,8 @@ include 'common:snowflake'
 include 'common:data-serializer'
 include 'common:event'
 include 'service'
+
 include 'service:auth'
 include 'service:memo-service'
 include 'service:board-service'
+include 'service:msa-gateway'
