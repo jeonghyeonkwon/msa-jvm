@@ -6,3 +6,39 @@ spring:
     name: msa-gateway
   main:
     web-application-type: reactive
+  cloud:
+    gateway:
+      default-filters:
+        - name: GlobalFilter
+          args:
+            baseMessage: Spring Cloud Gateway Global Filter
+            preLogger: true
+            postLogger: true
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
+
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allow-credentials: true
+            allowedOrigins: "http://localhost:3000"
+            allowedHeaders: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - DELETE
+              - PUT
+              - PATCH
+              - OPTIONS
+      routes:
+        - id: auth-service
+          uri: http://127.0.0.1:8081
+          predicates:
+            - Path=/api/auth/**, /login
+        - id: memo-service
+          uri: http://127.0.0.1:8082
+          predicates:
+            - Path=\\/.*memo.*$"
+        - id: memo-service
+            uri: http://127.0.0.1:8082
+            predicates:
+              - Path=\\/.*memo.*$"

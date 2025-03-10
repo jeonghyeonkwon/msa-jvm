@@ -6,8 +6,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jeonghyeon.msa.auth.exception.ErrorResult;
 import jeonghyeon.msa.auth.domain.Users;
+import jeonghyeon.msa.auth.exception.ErrorResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -51,6 +51,14 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 //        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 //        SecurityContextHolder.getContext().setAuthentication(authToken);
 //        filterChain.doFilter(request, response);
+
+//        Enumeration<String> headerNames = request.getHeaderNames();
+//        while (headerNames.hasMoreElements()) {
+//            String headerName = headerNames.nextElement();
+//            String headerValue = request.getHeader(headerName);
+//            System.out.println(headerName + ": " + headerValue);
+//        }
+
 
         String accessToken = request.getHeader(ACCESS_TOKEN);
         if (accessToken == null) {
