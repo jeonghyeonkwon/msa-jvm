@@ -4,6 +4,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jeonghyeon.msa.auth.dto.response.ResponseDto;
 import jeonghyeon.msa.auth.exception.ErrorResult;
 import jeonghyeon.msa.auth.dto.request.RegisterDto;
 import jeonghyeon.msa.auth.security.JwtTokenUtil;
@@ -26,7 +27,7 @@ public class UserController {
 
     @PostMapping("/user")
     public ResponseEntity register(@RequestBody RegisterDto dto) {
-        return new ResponseEntity(userService.register(dto), HttpStatus.CREATED);
+        return new ResponseEntity(new ResponseDto<>(userService.register(dto)), HttpStatus.CREATED);
     }
 
     @PostMapping("/reissue")

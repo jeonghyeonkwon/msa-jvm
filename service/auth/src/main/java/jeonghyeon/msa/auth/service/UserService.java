@@ -33,7 +33,7 @@ public class UserService {
                 }
         );
 
-        System.out.println("2");
+
         Users user = Users.createBasic(
                 snowflake.nextId(), dto.getUsername(), passwordEncoder.encode(dto.getPassword()), dto.getNickName()
         );

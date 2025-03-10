@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.Arrays;
+import java.util.regex.Pattern;
 
 
 @Getter
@@ -27,6 +28,7 @@ public class Users extends BaseTimeEntity {
     private UsersRole usersRole;
 
     public Users(Long usersId, String username, String password, String nickName, UsersRole usersRole) {
+        validate(username, password, nickName);
         this.usersId = usersId;
         this.username = username;
         this.password = password;
@@ -36,6 +38,18 @@ public class Users extends BaseTimeEntity {
 
     public static Users createBasic(Long usersId, String username, String password, String nickName) {
         return new Users(usersId, username, password, nickName, UsersRole.BASIC);
+    }
+
+    private static void validate(String username, String password, String nickName) {
+        notBlank(username);
+        notBlank(password);
+        notBlank(nickName);
+        String regex = "^[a-zA-Z0-9]+$";
+        if (!Pattern.matches(regex, username)) throw new IllegalArgumentException("아이디 패턴이 맞지 않습니다");
+    }
+
+    private static void notBlank(String text) {
+        if (text == null || text.isBlank()) throw new IllegalArgumentException("빈 값을 넣을 수 없습니다.");
     }
 
     public static Users createAdmin(Long usersId, String username, String password) {
