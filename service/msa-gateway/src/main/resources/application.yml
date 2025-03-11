@@ -38,7 +38,7 @@ spring:
           uri: http://127.0.0.1:8082
           predicates:
             - Path=\\/.*memo.*$"
-        - id: memo-service
-            uri: http://127.0.0.1:8082
-            predicates:
-              - Path=\\/.*memo.*$"
+        - id: board-service
+          uri: http://127.0.0.1:8083
+          predicates:
+            - Path=\\/.*board.*$"

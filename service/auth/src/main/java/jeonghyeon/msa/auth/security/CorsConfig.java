@@ -6,6 +6,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import static jeonghyeon.msa.auth.security.JwtAuthenticationFilter.ACCESS_TOKEN;
+
 @Configuration
 public class CorsConfig {
 
@@ -17,8 +19,9 @@ public class CorsConfig {
         config.addAllowedOrigin("http://localhost:3000");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
-
+        config.addExposedHeader(ACCESS_TOKEN);
         source.registerCorsConfiguration("/**", config);
+
         return new CorsFilter(source);
     }
 }

@@ -1,5 +1,6 @@
 package jeonghyeon.msa.auth.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,8 +13,11 @@ import jeonghyeon.msa.auth.security.RedisRepository;
 import jeonghyeon.msa.auth.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 import static jeonghyeon.msa.auth.security.JwtAuthenticationFilter.*;
 
@@ -31,7 +35,7 @@ public class UserController {
     }
 
     @PostMapping("/reissue")
-    public ResponseEntity<?> reissue(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<?> reissue(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         String refreshToken = null;
 
@@ -69,6 +73,10 @@ public class UserController {
         redisRepository.save(newRefresh, 24L);
         response.setStatus(HttpStatus.OK.value());
 
+        response.setCharacterEncoding("utf-8");
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        ObjectMapper om = new ObjectMapper();
+        response.getWriter().write(om.writeValueAsString(new ResponseDto<>(usersId)));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

@@ -7,6 +7,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jeonghyeon.msa.auth.dto.request.LoginDto;
+import jeonghyeon.msa.auth.dto.response.ResponseDto;
 import jeonghyeon.msa.auth.exception.ErrorResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,8 +25,8 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    public static final String ACCESS_TOKEN = "accessToken";
-    public static final String REFRESH_TOKEN = "refreshToken";
+    public static final String ACCESS_TOKEN = "access-token";
+    public static final String REFRESH_TOKEN = "refresh-token";
     public static final Long ACCESS_EXPIRE = 600000L;
     public static final Long REFRESH_EXPIRE = 24 * 60 * 60L;
 
@@ -78,8 +79,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         response.setHeader(ACCESS_TOKEN, access);
         response.addCookie(createCookie(REFRESH_TOKEN, refresh));
-        redisRepository.save(refresh,24L);
+        redisRepository.save(refresh, 24L);
         response.setStatus(HttpStatus.OK.value());
+
+        response.setCharacterEncoding("utf-8");
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        ObjectMapper om = new ObjectMapper();
+        response.getWriter().write(om.writeValueAsString(new ResponseDto<>(usersId)));
 
     }
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jeonghyeon.msa.auth.domain.Users;
@@ -16,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Enumeration;
 
 import static jeonghyeon.msa.auth.security.JwtAuthenticationFilter.ACCESS_TOKEN;
 
@@ -51,7 +53,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 //        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 //        SecurityContextHolder.getContext().setAuthentication(authToken);
 //        filterChain.doFilter(request, response);
-
+//
 //        Enumeration<String> headerNames = request.getHeaderNames();
 //        while (headerNames.hasMoreElements()) {
 //            String headerName = headerNames.nextElement();
@@ -59,6 +61,24 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 //            System.out.println(headerName + ": " + headerValue);
 //        }
 
+
+//        Cookie[] cookies = request.getCookies();
+//
+//        if (cookies != null) {
+//            for (Cookie cookie : cookies) {
+//                // 쿠키의 이름과 값을 출력합니다.
+//                System.out.println("Cookie Name: " + cookie.getName());
+//                System.out.println("Cookie Value: " + cookie.getValue());
+//
+//                // 특정 쿠키를 확인하고 싶다면
+//                if ("yourCookieName".equals(cookie.getName())) {
+//                    // 쿠키가 존재할 경우의 처리
+//                    System.out.println("Found yourCookieName: " + cookie.getValue());
+//                }
+//            }
+//        } else {
+//            System.out.println("No cookies found.");
+//        }
 
         String accessToken = request.getHeader(ACCESS_TOKEN);
         if (accessToken == null) {
@@ -92,8 +112,5 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(token);
 
         filterChain.doFilter(request, response);
-
     }
-
-
 }
