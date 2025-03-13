@@ -14,19 +14,19 @@ import org.springframework.web.bind.annotation.RestController
 
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/api")
 class MemoController(private val memoService: MemoService) {
 
 
-    @GetMapping("{usersId}/memo")
+    @GetMapping("/{usersId}/memo")
     fun getMemos(@PathVariable usersId: Long, pageable: Pageable) {
         memoService.getMemos(usersId, pageable)
     }
 
-    @PostMapping("{usersId}/memo")
-    fun createMemo(@PathVariable usersId: Long, @RequestBody memoDto: MemoDto): ResponseEntity<Long> {
+    @PostMapping("/{usersId}/memo")
+    fun createMemo(@PathVariable usersId: Long, @RequestBody memoDto: MemoDto): ResponseEntity<String> {
         val memoId: Long = memoService.createMemo(usersId, memoDto)
-        return ResponseEntity(memoId, HttpStatus.CREATED)
+        return ResponseEntity(memoId.toString(), HttpStatus.CREATED)
     }
 
 }

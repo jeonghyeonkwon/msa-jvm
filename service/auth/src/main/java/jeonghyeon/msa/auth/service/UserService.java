@@ -45,4 +45,7 @@ public class UserService {
         return savedUser.getUsersId();
     }
 
+    public Long findUsersIdByUsername(String username) {
+        return usersRepository.findUsersIdByUsername(username);
+    }
 }

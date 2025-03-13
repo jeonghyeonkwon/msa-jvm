@@ -10,6 +10,8 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
+import static jeonghyeon.msa.auth.security.JwtTokenFilter.DELIMITER;
+
 @Slf4j
 @Component
 public class JwtTokenUtil {
@@ -24,14 +26,14 @@ public class JwtTokenUtil {
         );
     }
 
-    public Long getUsersId(String token) {
-        return Jwts.parser()
-                .verifyWith(secretKey)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .get("usersId", Long.class);
-    }
+//    public Long getUsersId(String token) {
+//        return Jwts.parser()
+//                .verifyWith(secretKey)
+//                .build()
+//                .parseSignedClaims(token)
+//                .getPayload()
+//                .get("usersId", Long.class);
+//    }
 
     public String getUsername(String token) {
         return Jwts.parser()
@@ -79,10 +81,10 @@ public class JwtTokenUtil {
                 .compact();
     }
 
-    public String createJwtWithAccessAndRefresh(String category, Long usersId, String username, String role, long expiredMs) {
+    public String createJwtWithAccessAndRefresh(String category,  String username, String role, long expiredMs) {
+
         return Jwts.builder()
                 .claim("category", category)
-                .claim("usersId", usersId)
                 .claim("username", username)
                 .claim("role", role)
                 .issuedAt(new Date(System.currentTimeMillis()))
@@ -90,5 +92,15 @@ public class JwtTokenUtil {
                 .signWith(secretKey)
                 .compact();
 
+    }
+
+    public String getUsernameAuthorization(String authorization) {
+        String accessToken = authorization.split(DELIMITER)[1];
+        return Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(accessToken)
+                .getPayload()
+                .get("username", String.class);
     }
 }

@@ -12,12 +12,14 @@ import jeonghyeon.msa.auth.security.JwtTokenUtil;
 import jeonghyeon.msa.auth.security.RedisRepository;
 import jeonghyeon.msa.auth.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Map;
 
 import static jeonghyeon.msa.auth.security.JwtAuthenticationFilter.*;
 
@@ -29,6 +31,15 @@ public class UserController {
     private final RedisRepository redisRepository;
     private final JwtTokenUtil jwtTokenUtil;
 
+
+    @GetMapping({"","/"})
+    public ResponseEntity certification(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization){
+
+        String username = jwtTokenUtil.getUsernameAuthorization(authorization);
+
+        Long usersId = userService.findUsersIdByUsername(username);
+        return new ResponseEntity(new ResponseDto<>(String.valueOf(usersId)),HttpStatus.OK);
+    }
     @PostMapping("/user")
     public ResponseEntity register(@RequestBody RegisterDto dto) {
         return new ResponseEntity(new ResponseDto<>(userService.register(dto)), HttpStatus.CREATED);
@@ -53,6 +64,7 @@ public class UserController {
         try {
             jwtTokenUtil.isExpired(refreshToken);
             if (!redisRepository.isExist(refreshToken)) {
+
                 return new ResponseEntity<>(new ErrorResult("refreshToken이 만료되었습니다."), HttpStatus.BAD_REQUEST);
             }
         } catch (ExpiredJwtException e) {
@@ -61,12 +73,15 @@ public class UserController {
 
         redisRepository.delete(refreshToken);
 
-        Long usersId = jwtTokenUtil.getUsersId(refreshToken);
+
         String username = jwtTokenUtil.getUsername(refreshToken);
         String role = jwtTokenUtil.getRole(refreshToken);
 
-        String newAccess = jwtTokenUtil.createJwtWithAccessAndRefresh(ACCESS_TOKEN, usersId, username, role, ACCESS_EXPIRE);
-        String newRefresh = jwtTokenUtil.createJwtWithAccessAndRefresh(REFRESH_TOKEN, usersId, username, role, REFRESH_EXPIRE);
+        String newAccess = jwtTokenUtil.createJwtWithAccessAndRefresh(ACCESS_TOKEN,  username, role, ACCESS_EXPIRE);
+
+        String newRefresh = jwtTokenUtil.createJwtWithAccessAndRefresh(REFRESH_TOKEN,  username, role, REFRESH_EXPIRE);
+
+
 
         response.setHeader(ACCESS_TOKEN, newAccess);
         response.addCookie(createCookie(REFRESH_TOKEN, newRefresh));
@@ -76,7 +91,7 @@ public class UserController {
         response.setCharacterEncoding("utf-8");
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         ObjectMapper om = new ObjectMapper();
-        response.getWriter().write(om.writeValueAsString(new ResponseDto<>(usersId)));
+        response.getWriter().write(om.writeValueAsString(new ResponseDto<>(username)));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

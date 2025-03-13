@@ -24,6 +24,7 @@ public class RedisRepository {
     }
 
     public boolean isExist(String token) {
+        System.out.println(token);
         return redisTemplate.hasKey(generateKey(token));
     }
 

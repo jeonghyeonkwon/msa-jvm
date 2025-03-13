@@ -44,7 +44,7 @@ class MemoService(
 
     @Transactional
     fun createMemo(usersId: Long, memoDto: MemoDto): Long {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")
         val users: Users = usersRepository.findByIdOrNull(usersId) ?: throw IllegalArgumentException("에러발생")
 
         val saved = memoRepository.save(

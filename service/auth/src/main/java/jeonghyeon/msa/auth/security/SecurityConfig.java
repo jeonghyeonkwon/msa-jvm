@@ -40,7 +40,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .httpBasic((auth) -> auth.disable())
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/", "/login", "/api/auth/user", "/api/auth/reissue").permitAll()
+                        auth.requestMatchers("/api/auth", "/login", "/api/auth/user", "/api/auth/reissue").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtTokenFilter(jwtTokenUtil), JwtAuthenticationFilter.class)

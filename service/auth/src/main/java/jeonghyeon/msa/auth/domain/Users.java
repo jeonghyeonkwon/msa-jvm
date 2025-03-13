@@ -28,7 +28,7 @@ public class Users extends BaseTimeEntity {
     private UsersRole usersRole;
 
     public Users(Long usersId, String username, String password, String nickName, UsersRole usersRole) {
-        validate(username, password, nickName);
+
         this.usersId = usersId;
         this.username = username;
         this.password = password;
@@ -37,6 +37,7 @@ public class Users extends BaseTimeEntity {
     }
 
     public static Users createBasic(Long usersId, String username, String password, String nickName) {
+        validate(username, password, nickName);
         return new Users(usersId, username, password, nickName, UsersRole.BASIC);
     }
 
@@ -56,13 +57,14 @@ public class Users extends BaseTimeEntity {
         return new Users(usersId, username, password, "관리자", UsersRole.ADMIN);
     }
 
-    public static Users login(Long usersId, String username, String role) {
+    public static Users login(String username, String role) {
+
         return new Users(
-                usersId,
+                0L,
                 username,
                 "",
                 "",
-                Arrays.stream(UsersRole.values()).filter(usersRole -> usersRole.name().equals(role)).findFirst().get()
+                Arrays.stream(UsersRole.values()).filter(usersRole -> ("ROLE_" + usersRole.name()).equals(role)).findFirst().get()
         );
     }
 }

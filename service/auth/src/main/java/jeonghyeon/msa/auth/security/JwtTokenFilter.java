@@ -20,10 +20,12 @@ import java.io.IOException;
 import java.util.Enumeration;
 
 import static jeonghyeon.msa.auth.security.JwtAuthenticationFilter.ACCESS_TOKEN;
+import static jeonghyeon.msa.auth.security.JwtTokenUtil.BEARER;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @RequiredArgsConstructor
 public class JwtTokenFilter extends OncePerRequestFilter {
-    private static final String DELIMITER = " ";
+    public static final String DELIMITER = " ";
     private final JwtTokenUtil jwtTokenUtil;
 
     @Override
@@ -80,11 +82,13 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 //            System.out.println("No cookies found.");
 //        }
 
-        String accessToken = request.getHeader(ACCESS_TOKEN);
-        if (accessToken == null) {
+        String authorization = request.getHeader(AUTHORIZATION);
+        if (authorization == null || !authorization.startsWith(BEARER)) {
             filterChain.doFilter(request, response);
             return;
         }
+
+        String accessToken = authorization.split(DELIMITER)[1];
 
         try {
             jwtTokenUtil.isExpired(accessToken);
@@ -92,7 +96,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             ObjectMapper om = new ObjectMapper();
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.getWriter().write(om.writeValueAsString(new ErrorResult("토큰 만료되었습니다.")));
+            response.setCharacterEncoding("utf-8");
+
+            response.getWriter().write(om.writeValueAsString(new ErrorResult("토큰이 만료되었습니다.")));
+            return;
         }
 
         String category = jwtTokenUtil.getCategory(accessToken);
@@ -100,13 +107,15 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             ObjectMapper om = new ObjectMapper();
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding("utf-8");
             response.getWriter().write(om.writeValueAsString(new ErrorResult("유효하지 않은 토큰입니다.")));
+            return;
         }
 
-        Long usersId = jwtTokenUtil.getUsersId(accessToken);
+//        Long usersId = jwtTokenUtil.getUsersId(accessToken);
         String username = jwtTokenUtil.getUsername(accessToken);
         String role = jwtTokenUtil.getRole(accessToken);
-        PrincipalUserDetails userDetails = new PrincipalUserDetails(Users.login(usersId, username, role));
+        PrincipalUserDetails userDetails = new PrincipalUserDetails(Users.login(username, role));
 
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(token);

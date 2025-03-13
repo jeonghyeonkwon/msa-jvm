@@ -25,10 +25,10 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    public static final String ACCESS_TOKEN = "access-token";
+    public static final String ACCESS_TOKEN = "Access-Token";
     public static final String REFRESH_TOKEN = "refresh-token";
-    public static final Long ACCESS_EXPIRE = 600000L;
-    public static final Long REFRESH_EXPIRE = 24 * 60 * 60L;
+    public static final Long ACCESS_EXPIRE = 60000L;
+    public static final Long REFRESH_EXPIRE = 1000 * 60 * 60L;
 
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
@@ -66,7 +66,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 //        response.addHeader(AUTHORIZATION, BEARER + token);
 
         // 2차 access + refresh
-        Long usersId = userDetails.getUsersId();
+
         String username = userDetails.getUsername();
         GrantedAuthority auth = authResult
                 .getAuthorities()
@@ -74,8 +74,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .next();
 
         String role = auth.getAuthority();
-        String access = jwtTokenUtil.createJwtWithAccessAndRefresh("access", usersId, username, role, ACCESS_EXPIRE);
-        String refresh = jwtTokenUtil.createJwtWithAccessAndRefresh("refresh", usersId, username, role, REFRESH_EXPIRE);
+        String access = jwtTokenUtil.createJwtWithAccessAndRefresh(ACCESS_TOKEN,  username, role, ACCESS_EXPIRE);
+        String refresh = jwtTokenUtil.createJwtWithAccessAndRefresh(REFRESH_TOKEN,  username, role, REFRESH_EXPIRE);
 
         response.setHeader(ACCESS_TOKEN, access);
         response.addCookie(createCookie(REFRESH_TOKEN, refresh));
@@ -85,13 +85,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.setCharacterEncoding("utf-8");
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         ObjectMapper om = new ObjectMapper();
-        response.getWriter().write(om.writeValueAsString(new ResponseDto<>(usersId)));
+        response.getWriter().write(om.writeValueAsString(new ResponseDto<>(username)));
 
     }
 
     public static Cookie createCookie(String key, String value) {
         Cookie cookie = new Cookie(key, value);
         cookie.setMaxAge(24 * 60 * 60);
+        cookie.setPath("/");
         cookie.setHttpOnly(true);
         return cookie;
     }
@@ -102,7 +103,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setCharacterEncoding("utf-8");
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE.toString());
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         ObjectMapper om = new ObjectMapper();
 
         if (failed instanceof BadCredentialsException) {
