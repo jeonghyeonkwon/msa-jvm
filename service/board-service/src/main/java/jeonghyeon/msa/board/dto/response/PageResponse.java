@@ -37,13 +37,11 @@ public class PageResponse<T> {
 
     public PageResponse(Long currentPage, Long pageSize, List<T> list, Long count, Long pageBlock) {
         this.currentPage = currentPage;
-        this.totalPage = count / pageSize;
+        this.totalPage = count % pageSize == 0 ? count / pageSize - 1 : count / pageSize;
         this.startBlockPage = (currentPage / pageBlock) * pageBlock;
         this.endBlockPage = Math.min(this.startBlockPage + pageBlock - 1, this.totalPage);
         this.isFirst = this.startBlockPage / pageBlock != 0 ? true : false;
-        this.isLast = (this.startBlockPage + pageBlock - 1) * pageBlock < count ? true : false;
-
-        // 0 < 5
+        this.isLast = this.endBlockPage < this.totalPage ? true : false;
 
 
         this.list = list;

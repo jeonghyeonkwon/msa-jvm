@@ -19,5 +19,9 @@ class Memo(
     val users: Users
 
 ) : BaseTimeEntity() {
-
+    init{
+        if(title.isBlank()||content.isBlank()){
+            throw IllegalArgumentException("빈 값을 넣을 수 없습니다")
+        }
+    }
 }

@@ -15,6 +15,7 @@ import jeonghyeon.msa.memo.util.PageLimitCalculator
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import java.time.DateTimeException
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -25,6 +26,7 @@ class MemoService(
     private val memoMapper: MemoMapper
 ) {
     private val snowflake: Snowflake = Snowflake()
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")
 
     @Transactional
     fun createUser(usersDto: UsersDto) {
@@ -44,14 +46,17 @@ class MemoService(
 
     @Transactional
     fun createMemo(usersId: Long, memoDto: MemoDto): Long {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")
+
         val users: Users = usersRepository.findByIdOrNull(usersId) ?: throw IllegalArgumentException("에러발생")
+
+        val startDate = toLocalDateTime(memoDto.startDate)
+        val endDate = LocalDateTime.parse(memoDto.endDate)
 
         val saved = memoRepository.save(
             Memo(
                 snowflake.nextId(), memoDto.title, memoDto.content,
-                LocalDateTime.parse(memoDto.startDate, formatter),
-                LocalDateTime.parse(memoDto.endDate, formatter),
+                startDate,
+                endDate,
                 users
             )
         )
@@ -59,16 +64,25 @@ class MemoService(
         return saved.id;
     }
 
-    fun getMemos(usersId: Long, pageable: Pageable): PageResponse<MemoDto> {
+    private fun toLocalDateTime(
+        text: String,
+        ):LocalDateTime{
+      return try{
+          LocalDateTime.parse(text, formatter)
+      }catch (e:DateTimeException){
+          throw IllegalArgumentException("잘못된 날짜 형식입니다.")
+      }
+    }
+
+    fun getMemos(usersId: Long, pageable: Pageable, pageBlock: Long): PageResponse<MemoDto> {
         val pageNumber = pageable.pageNumber.toLong()
         val pageSize = pageable.pageSize.toLong()
         val count = memoMapper.count(
             usersId,
-            PageLimitCalculator.calculatePageLimit(pageNumber, pageSize, 10L)
+            PageLimitCalculator.calculatePageLimit(pageNumber, pageSize, pageBlock)
         )
         val memos: List<MemoDto> = memoMapper.getMemos(usersId, pageNumber * pageSize, pageSize)
-
-        return PageResponse<MemoDto>(pageNumber, pageSize, memos, count, 10L)
+        return PageResponse<MemoDto>(pageNumber, pageSize, memos, count, pageBlock)
     }
 
 

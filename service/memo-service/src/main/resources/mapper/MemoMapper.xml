@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="jeonghyeon.msa.memo.repository.mapper">
+<mapper namespace="jeonghyeon.msa.memo.repository.mapper.MemoMapper">
     <select id="count" resultType="Long">
         SELECT COUNT(*)
         FROM (
-            SELECT memo_id
+            SELECT id
             FROM memo
             WHERE memo.users_id = #{usersId}
             LIMIT #{limit}
-         )
+         ) m
     </select>
-    <select id="getMemos" resultType="jeonghyeon.msa.memo.dto.request.MemoDto">
+
+    <resultMap id="MemoSimpleResult" type="jeonghyeon.msa.memo.dto.request.MemoDto">
+        <result property="memosId" column="id"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="startDate" column="start_date"/>
+        <result property="endDate" column="end_date"/>
+    </resultMap>
+    <select id="getMemos" resultMap="MemoSimpleResult">
         SELECT
-            title, content, start_date, end_date
+            m.id, title, content, start_date, end_date
         FROM (
             SELECT id
             FROM memo
@@ -21,8 +29,8 @@
             ORDER BY id DESC
             LIMIT #{limit}
             OFFSET #{offset}
-         ) t
-        LEFT JOIN memo ON t.id = memo.id
+         ) m
+        LEFT JOIN memo ON m.id = memo.id
     </select>
 
 

@@ -27,6 +27,21 @@ class PageResponseTest {
     }
 
     @Test
+    void page_0번_block_size_5() {
+        List<Object> test = new ArrayList<>();
+        Long count = PageLimitCalculator.calculatePageLimit(0L, 1L, 5L);
+        System.out.println(count);
+        PageResponse<Object> dto = new PageResponse<Object>(0L, 1L, test, count, 5L);
+
+        assertAll(
+                ()->assertThat(dto.getStartBlockPage()).isEqualTo(0),
+                ()->assertThat(dto.getEndBlockPage()).isEqualTo(4),
+                ()->assertThat(dto.isFirst()).isEqualTo(false),
+                ()->assertThat(dto.isLast()).isEqualTo(true)
+        );
+    }
+
+    @Test
     void page_9번() {
         List<Object> test = new ArrayList<>();
         Long count = PageLimitCalculator.calculatePageLimit(9L, 10L, 10L);
@@ -68,11 +83,28 @@ class PageResponseTest {
     }
 
     @Test
-    void page() {
+    void page_0번_갯수가_10개_아닐_시() {
 
         List<Object> test = new ArrayList<>();
         Long count = 5L;
         PageResponse<Object> dto = new PageResponse<Object>(0L, 10L, test, count, 10L);
+        System.out.println(dto);
+        assertAll(
+                ()->assertThat(dto.getStartBlockPage()).isEqualTo(0),
+                ()->assertThat(dto.getEndBlockPage()).isEqualTo(0),
+                ()->assertThat(dto.isFirst()).isEqualTo(false),
+                ()->assertThat(dto.isLast()).isEqualTo(false)
+        );
+
+    }
+
+    @Test
+    void page_리스트_갯수가_10개일_시() {
+
+        List<Object> test = new ArrayList<>();
+        Long count = 7L;
+        PageResponse<Object> dto = new PageResponse<Object>(0L, 10L, test, count, 5L);
+        System.out.println(dto);
         assertAll(
                 ()->assertThat(dto.getStartBlockPage()).isEqualTo(0),
                 ()->assertThat(dto.getEndBlockPage()).isEqualTo(0),

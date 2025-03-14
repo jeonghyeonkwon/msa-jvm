@@ -25,4 +25,4 @@ mybatis:
   type-aliases-package: jeonghyeon.msa.memo.domain
   configuration:
     map-underscore-to-camel-case: true
-  mapper-locations: mapper/**/*.xml
+  mapper-locations: classpath:mapper/**/*.xml
