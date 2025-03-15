@@ -1,7 +1,6 @@
 package jeonghyeon.msa.board.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jeonghyeon.msa.board.domain.QComment;
 import jeonghyeon.msa.board.dto.response.CommentResponse;
 import jeonghyeon.msa.board.dto.response.QCommentResponse;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,6 @@ import static jeonghyeon.msa.board.domain.QUsers.users;
 public class CommentRepositoryCustomImpl implements CommentRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
-
 
     @Override
     public List<CommentResponse> findList(Long boardId, Long offset, Long limit) {

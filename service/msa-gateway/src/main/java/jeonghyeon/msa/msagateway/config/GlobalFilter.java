@@ -26,13 +26,13 @@ public class GlobalFilter extends AbstractGatewayFilterFactory<GlobalFilter.Conf
 
             log.info("Global Filter baseMessage: {}", config.getBaseMessaqge());
 
-            if(config.isPreLogger()) {
+            if (config.isPreLogger()) {
                 log.info("Global Filter Start: request id -> {}", request.getId());
             }
 
             // Custom Post Filter
             return chain.filter(exchange).then(Mono.fromRunnable(() -> {
-                if(config.isPostLogger()) {
+                if (config.isPostLogger()) {
                     log.info("Global Filter End: response id -> {}", response.getStatusCode());
                 }
             }));

@@ -12,7 +12,7 @@
          ) m
     </select>
 
-    <resultMap id="MemoSimpleResult" type="jeonghyeon.msa.memo.dto.request.MemoDto">
+    <resultMap id="MemoSimpleResult" type="jeonghyeon.msa.memo.dto.response.MemoResponse">
         <result property="memosId" column="id"/>
         <result property="title" column="title"/>
         <result property="content" column="content"/>

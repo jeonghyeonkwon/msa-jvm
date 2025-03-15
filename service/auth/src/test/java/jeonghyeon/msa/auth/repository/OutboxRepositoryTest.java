@@ -5,7 +5,6 @@ import jeonghyeon.msa.auth.domain.OutboxType;
 import jeonghyeon.msa.common.Snowflake;
 import jeonghyeon.msa.common.event.EventType;
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,12 +36,12 @@ class OutboxRepositoryTest {
     }
 
     @AfterEach
-    void destory(){
+    void destory() {
         outboxRepository.deleteAll();
     }
 
     @Test
-    void ready_size(){
+    void ready_size() {
         List<Outbox> outboxs = outboxRepository.findByCreatedAtLessThanEqualsOrderByCreatedAtAsc(
                 OutboxType.READY,
                 LocalDateTime.now().minusSeconds(10),

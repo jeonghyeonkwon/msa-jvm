@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Table(name = "users",indexes = @Index(name="idx_username",columnList = "username"))
+@Table(name = "users", indexes = @Index(name = "idx_username", columnList = "username"))
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 

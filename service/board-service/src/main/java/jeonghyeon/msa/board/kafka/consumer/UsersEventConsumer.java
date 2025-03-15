@@ -23,7 +23,7 @@ public class UsersEventConsumer {
     public void listen(String message, Acknowledgment ack) {
         log.info("[UsersCreateEventConsumer.listen] message = {}", message);
         Event<EventPayload> event = Event.fromJson(message);
-        if(event!=null){
+        if (event != null) {
             boardService.handleEvent(event);
         }
         ack.acknowledge();

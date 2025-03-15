@@ -27,9 +27,9 @@ class UsersCreateEventConsumer(
         val event: Event<EventPayload> = Event.fromJson(message)
         println(event.toString())
         if (event != null) {
-            if(event.type == EventType.AUTH_CREATE){
+            if (event.type == EventType.AUTH_CREATE) {
                 val payload: AuthCreateEventPayload = event.payload as AuthCreateEventPayload
-                memoService.createUser(UsersDto(payload.usersId,payload.username) )
+                memoService.createUser(UsersDto(payload.usersId, payload.username))
                 ack.acknowledge()
                 return
             }

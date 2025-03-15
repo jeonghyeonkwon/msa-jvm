@@ -1,6 +1,6 @@
 package jeonghyeon.msa.memo.repository.mapper
 
-import jeonghyeon.msa.memo.dto.request.MemoDto
+import jeonghyeon.msa.memo.dto.response.MemoResponse
 import org.apache.ibatis.annotations.Mapper
 import org.apache.ibatis.annotations.Param
 
@@ -9,10 +9,11 @@ import org.apache.ibatis.annotations.Param
 interface MemoMapper {
 
     fun count(@Param("usersId") usersId: Long, @Param("limit") limit: Long): Long
+
     fun getMemos(
         @Param("usersId") usersId: Long,
         @Param("offset") offset: Long,
         @Param("limit") limit: Long
-    ): List<MemoDto>
+    ): List<MemoResponse>
 
 }

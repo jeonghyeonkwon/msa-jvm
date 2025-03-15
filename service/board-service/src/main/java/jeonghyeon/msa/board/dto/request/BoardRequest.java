@@ -7,5 +7,4 @@ import lombok.Data;
 public class BoardRequest {
     private String title;
     private String content;
-
 }

@@ -13,7 +13,7 @@ public class ExceptionAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IllegalArgumentException.class)
-    public ErrorResult illegalState(IllegalArgumentException e){
+    public ErrorResult illegalState(IllegalArgumentException e) {
         log.error(e.getMessage());
         return new ErrorResult(e.getMessage());
     }

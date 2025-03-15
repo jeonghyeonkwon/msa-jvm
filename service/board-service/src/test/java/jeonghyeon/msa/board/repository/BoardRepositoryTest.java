@@ -63,7 +63,7 @@ class BoardRepositoryTest {
     }
 
     @Test
-    void list(){
+    void list() {
         List<BoardResponse> list = boardRepository.findList(0L, 10L);
         System.out.println(list);
     }
@@ -75,7 +75,7 @@ class BoardRepositoryTest {
     }
 
     @Test
-    void page(){
+    void page() {
         Long pageSize = 10L;
         Long pageNumber = 10L;
 
@@ -87,8 +87,9 @@ class BoardRepositoryTest {
         PageResponse<BoardResponse> page = new PageResponse<>(pageNumber, pageSize, list, count, 10L);
         System.out.println(page);
     }
+
     @Test
-    void page2(){
+    void page2() {
         Long pageSize = 10L;
         Long pageNumber = 9L;
 
@@ -100,8 +101,9 @@ class BoardRepositoryTest {
         PageResponse<BoardResponse> page = new PageResponse<>(pageNumber, pageSize, list, count, 10L);
         System.out.println(page);
     }
+
     @Test
-    void page3(){
+    void page3() {
         Long pageSize = 10L;
         Long pageNumber = 11L;
 

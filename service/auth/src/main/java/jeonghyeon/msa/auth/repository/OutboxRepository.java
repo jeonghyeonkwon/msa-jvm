@@ -2,7 +2,6 @@ package jeonghyeon.msa.auth.repository;
 
 import jeonghyeon.msa.auth.domain.Outbox;
 import jeonghyeon.msa.auth.domain.OutboxType;
-import jeonghyeon.msa.common.event.EventType;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

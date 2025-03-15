@@ -2,7 +2,6 @@ package jeonghyeon.msa.auth.domain;
 
 
 import jakarta.persistence.*;
-import jeonghyeon.msa.common.event.EventPayload;
 import jeonghyeon.msa.common.event.EventType;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -32,7 +31,7 @@ public class Outbox extends BaseTimeEntity {
         this.outboxType = outboxType;
     }
 
-    public static Outbox create(Long outboxId, EventType eventType, String payload){
+    public static Outbox create(Long outboxId, EventType eventType, String payload) {
         return new Outbox(outboxId, eventType, payload, OutboxType.READY);
     }
 

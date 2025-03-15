@@ -24,8 +24,6 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 
     @Override
     public BoardDetailResponse getBoardDetail(Long boardId) {
-
-
         return jpaQueryFactory
                 .select(new QBoardDetailResponse(board.boardId, users.username, board.title, board.content))
                 .from(board)
@@ -64,7 +62,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
         List<BoardResponse> fetch = jpaQueryFactory
                 .select(new QBoardResponse(board.boardId, board.title, board.content, users.username, board.createdDate))
                 .from(board)
-                .join(board.users,users)
+                .join(board.users, users)
                 .where(board.boardId.in(ids))
                 .orderBy(board.boardId.desc())
                 .fetch();

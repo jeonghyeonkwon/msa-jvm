@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class PageResponseTest {
 
@@ -19,10 +19,10 @@ class PageResponseTest {
         PageResponse<Object> dto = new PageResponse<Object>(0L, 10L, test, count, 10L);
 
         assertAll(
-                ()->assertThat(dto.getStartBlockPage()).isEqualTo(0),
-                ()->assertThat(dto.getEndBlockPage()).isEqualTo(9),
-                ()->assertThat(dto.isFirst()).isEqualTo(false),
-                ()->assertThat(dto.isLast()).isEqualTo(true)
+                () -> assertThat(dto.getStartBlockPage()).isEqualTo(0),
+                () -> assertThat(dto.getEndBlockPage()).isEqualTo(9),
+                () -> assertThat(dto.isFirst()).isEqualTo(false),
+                () -> assertThat(dto.isLast()).isEqualTo(true)
         );
     }
 
@@ -34,10 +34,10 @@ class PageResponseTest {
         PageResponse<Object> dto = new PageResponse<Object>(0L, 1L, test, count, 5L);
 
         assertAll(
-                ()->assertThat(dto.getStartBlockPage()).isEqualTo(0),
-                ()->assertThat(dto.getEndBlockPage()).isEqualTo(4),
-                ()->assertThat(dto.isFirst()).isEqualTo(false),
-                ()->assertThat(dto.isLast()).isEqualTo(true)
+                () -> assertThat(dto.getStartBlockPage()).isEqualTo(0),
+                () -> assertThat(dto.getEndBlockPage()).isEqualTo(4),
+                () -> assertThat(dto.isFirst()).isEqualTo(false),
+                () -> assertThat(dto.isLast()).isEqualTo(true)
         );
     }
 
@@ -47,10 +47,10 @@ class PageResponseTest {
         Long count = PageLimitCalculator.calculatePageLimit(9L, 10L, 10L);
         PageResponse<Object> dto = new PageResponse<Object>(9L, 10L, test, count, 10L);
         assertAll(
-                ()->assertThat(dto.getStartBlockPage()).isEqualTo(0),
-                ()->assertThat(dto.getEndBlockPage()).isEqualTo(9),
-                ()->assertThat(dto.isFirst()).isEqualTo(false),
-                ()->assertThat(dto.isLast()).isEqualTo(true)
+                () -> assertThat(dto.getStartBlockPage()).isEqualTo(0),
+                () -> assertThat(dto.getEndBlockPage()).isEqualTo(9),
+                () -> assertThat(dto.isFirst()).isEqualTo(false),
+                () -> assertThat(dto.isLast()).isEqualTo(true)
         );
     }
 
@@ -60,10 +60,10 @@ class PageResponseTest {
         Long count = PageLimitCalculator.calculatePageLimit(10L, 10L, 10L);
         PageResponse<Object> dto = new PageResponse<Object>(10L, 10L, test, count, 10L);
         assertAll(
-                ()->assertThat(dto.getStartBlockPage()).isEqualTo(10),
-                ()->assertThat(dto.getEndBlockPage()).isEqualTo(19),
-                ()->assertThat(dto.isFirst()).isEqualTo(true),
-                ()->assertThat(dto.isLast()).isEqualTo(true)
+                () -> assertThat(dto.getStartBlockPage()).isEqualTo(10),
+                () -> assertThat(dto.getEndBlockPage()).isEqualTo(19),
+                () -> assertThat(dto.isFirst()).isEqualTo(true),
+                () -> assertThat(dto.isLast()).isEqualTo(true)
         );
     }
 
@@ -75,10 +75,10 @@ class PageResponseTest {
         Long count = 144L;
         PageResponse<Object> dto = new PageResponse<Object>(14L, 10L, test, count, 10L);
         assertAll(
-                ()->assertThat(dto.getStartBlockPage()).isEqualTo(10),
-                ()->assertThat(dto.getEndBlockPage()).isEqualTo(14),
-                ()->assertThat(dto.isFirst()).isEqualTo(true),
-                ()->assertThat(dto.isLast()).isEqualTo(false)
+                () -> assertThat(dto.getStartBlockPage()).isEqualTo(10),
+                () -> assertThat(dto.getEndBlockPage()).isEqualTo(14),
+                () -> assertThat(dto.isFirst()).isEqualTo(true),
+                () -> assertThat(dto.isLast()).isEqualTo(false)
         );
     }
 
@@ -90,10 +90,10 @@ class PageResponseTest {
         PageResponse<Object> dto = new PageResponse<Object>(0L, 10L, test, count, 10L);
         System.out.println(dto);
         assertAll(
-                ()->assertThat(dto.getStartBlockPage()).isEqualTo(0),
-                ()->assertThat(dto.getEndBlockPage()).isEqualTo(0),
-                ()->assertThat(dto.isFirst()).isEqualTo(false),
-                ()->assertThat(dto.isLast()).isEqualTo(false)
+                () -> assertThat(dto.getStartBlockPage()).isEqualTo(0),
+                () -> assertThat(dto.getEndBlockPage()).isEqualTo(0),
+                () -> assertThat(dto.isFirst()).isEqualTo(false),
+                () -> assertThat(dto.isLast()).isEqualTo(false)
         );
 
     }
@@ -106,10 +106,10 @@ class PageResponseTest {
         PageResponse<Object> dto = new PageResponse<Object>(0L, 10L, test, count, 5L);
         System.out.println(dto);
         assertAll(
-                ()->assertThat(dto.getStartBlockPage()).isEqualTo(0),
-                ()->assertThat(dto.getEndBlockPage()).isEqualTo(0),
-                ()->assertThat(dto.isFirst()).isEqualTo(false),
-                ()->assertThat(dto.isLast()).isEqualTo(false)
+                () -> assertThat(dto.getStartBlockPage()).isEqualTo(0),
+                () -> assertThat(dto.getEndBlockPage()).isEqualTo(0),
+                () -> assertThat(dto.isFirst()).isEqualTo(false),
+                () -> assertThat(dto.isLast()).isEqualTo(false)
         );
 
     }

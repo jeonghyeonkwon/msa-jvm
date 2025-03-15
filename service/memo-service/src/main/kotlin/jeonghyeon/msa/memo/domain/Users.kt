@@ -11,12 +11,9 @@ import jakarta.persistence.Table
 class Users(
     @Id
     val usersId: Long,
-
     val username: String,
 
-
-
-) {
+    ) {
     @OneToMany(mappedBy = "users")
     val memos: MutableList<Memo> = mutableListOf()
 }

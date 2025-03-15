@@ -13,14 +13,13 @@ import org.springframework.test.context.ActiveProfiles
 @ActiveProfiles("test")
 internal class MemoServiceTest @Autowired constructor(
     private val memoService: MemoService
-
-
-){
+) {
     private val snowflake = Snowflake()
+
     @Test
     @DisplayName("kafka를 이용한 유저 생성")
-    fun createUser(){
-        memoService.createUser(UsersDto(snowflake.nextId(),"givejeong2"))
+    fun createUser() {
+        memoService.createUser(UsersDto(snowflake.nextId(), "givejeong2"))
     }
 
 

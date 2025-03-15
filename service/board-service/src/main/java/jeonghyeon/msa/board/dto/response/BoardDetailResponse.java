@@ -22,9 +22,10 @@ public class BoardDetailResponse {
         this.title = title;
         this.content = content;
     }
+
     @QueryProjection
     public BoardDetailResponse(Long boardId, String username, String title,
-                               String content,Long viewCount) {
+                               String content, Long viewCount) {
         this.boardId = boardId;
         this.username = username;
         this.title = title;

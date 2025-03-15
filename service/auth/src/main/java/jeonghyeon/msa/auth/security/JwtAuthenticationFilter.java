@@ -74,8 +74,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .next();
 
         String role = auth.getAuthority();
-        String access = jwtTokenUtil.createJwtWithAccessAndRefresh(ACCESS_TOKEN,  username, role, ACCESS_EXPIRE);
-        String refresh = jwtTokenUtil.createJwtWithAccessAndRefresh(REFRESH_TOKEN,  username, role, REFRESH_EXPIRE);
+        String access = jwtTokenUtil.createJwtWithAccessAndRefresh(ACCESS_TOKEN, username, role, ACCESS_EXPIRE);
+        String refresh = jwtTokenUtil.createJwtWithAccessAndRefresh(REFRESH_TOKEN, username, role, REFRESH_EXPIRE);
 
         response.setHeader(ACCESS_TOKEN, access);
         response.addCookie(createCookie(REFRESH_TOKEN, refresh));

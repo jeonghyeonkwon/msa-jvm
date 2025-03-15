@@ -9,8 +9,8 @@ class UserControllerTest {
     RestClient restClient = RestClient.create("http://localhost:9090/api/auth");
 
     @Test
-    void register(){
-        RegisterDto dto = new RegisterDto("givejeong","1234","nickname");
+    void register() {
+        RegisterDto dto = new RegisterDto("givejeong", "1234", "nickname");
 
         String body = restClient.post()
                 .uri("/user")

@@ -37,7 +37,6 @@ public class BoardService {
     private final Snowflake snowflake = new Snowflake();
     private final List<EventHandler> eventHandlers;
 
-
     @Transactional
     public void handleEvent(Event<EventPayload> event) {
         for (EventHandler eventHandler : eventHandlers) {

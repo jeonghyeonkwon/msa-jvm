@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing
 @EnableJpaAuditing
 class MemoApplication
 
-fun main(args: Array<String>){
+fun main(args: Array<String>) {
     runApplication<MemoApplication>(*args)
 }

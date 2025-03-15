@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long>, CommentRepositoryCustom {
 
-
     @Query(
             value = "SELECT COUNT(*) FROM (" +
                     "   SELECT comment_id FROM comment where comment.board_id = :boardId LIMIT :limit" +

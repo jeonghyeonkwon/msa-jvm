@@ -1,12 +1,8 @@
 package jeonghyeon.msa.auth.security;
 
 
-import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.TimeoutUtils;
 import org.springframework.stereotype.Repository;
 
 import java.time.Duration;

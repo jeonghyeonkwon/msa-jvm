@@ -81,7 +81,7 @@ public class JwtTokenUtil {
                 .compact();
     }
 
-    public String createJwtWithAccessAndRefresh(String category,  String username, String role, long expiredMs) {
+    public String createJwtWithAccessAndRefresh(String category, String username, String role, long expiredMs) {
 
         return Jwts.builder()
                 .claim("category", category)

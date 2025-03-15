@@ -7,6 +7,7 @@ import jeonghyeon.msa.memo.domain.Memo
 import jeonghyeon.msa.memo.domain.Users
 import jeonghyeon.msa.memo.dto.request.MemoDto
 import jeonghyeon.msa.memo.dto.request.UsersDto
+import jeonghyeon.msa.memo.dto.response.MemoResponse
 import jeonghyeon.msa.memo.dto.response.PageResponse
 import jeonghyeon.msa.memo.repository.MemoRepository
 import jeonghyeon.msa.memo.repository.UsersRepository
@@ -66,23 +67,27 @@ class MemoService(
 
     private fun toLocalDateTime(
         text: String,
-        ):LocalDateTime{
-      return try{
-          LocalDateTime.parse(text, formatter)
-      }catch (e:DateTimeException){
-          throw IllegalArgumentException("잘못된 날짜 형식입니다.")
-      }
+    ): LocalDateTime {
+        return try {
+            LocalDateTime.parse(text, formatter)
+        } catch (e: DateTimeException) {
+            throw IllegalArgumentException("잘못된 날짜 형식입니다.")
+        }
     }
 
-    fun getMemos(usersId: Long, pageable: Pageable, pageBlock: Long): PageResponse<MemoDto> {
+    fun getMemos(usersId: Long, pageable: Pageable, pageBlock: Long): PageResponse<MemoResponse> {
         val pageNumber = pageable.pageNumber.toLong()
         val pageSize = pageable.pageSize.toLong()
         val count = memoMapper.count(
             usersId,
             PageLimitCalculator.calculatePageLimit(pageNumber, pageSize, pageBlock)
         )
-        val memos: List<MemoDto> = memoMapper.getMemos(usersId, pageNumber * pageSize, pageSize)
-        return PageResponse<MemoDto>(pageNumber, pageSize, memos, count, pageBlock)
+        val memos: List<MemoResponse> = memoMapper.getMemos(usersId, pageNumber * pageSize, pageSize)
+        return PageResponse<MemoResponse>(pageNumber, pageSize, memos, count, pageBlock)
+    }
+
+    fun getMemo(usersId: Long, memoId: Long): MemoResponse {
+        return memoRepository.findByUsersIdAndMemoId(usersId, memoId) ?: throw IllegalArgumentException("에러발생")
     }
 
 

@@ -5,9 +5,9 @@ import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jeonghyeon.msa.auth.dto.request.RegisterDto;
 import jeonghyeon.msa.auth.dto.response.ResponseDto;
 import jeonghyeon.msa.auth.exception.ErrorResult;
-import jeonghyeon.msa.auth.dto.request.RegisterDto;
 import jeonghyeon.msa.auth.security.JwtTokenUtil;
 import jeonghyeon.msa.auth.security.RedisRepository;
 import jeonghyeon.msa.auth.service.UserService;
@@ -19,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.Map;
 
 import static jeonghyeon.msa.auth.security.JwtAuthenticationFilter.*;
 
@@ -32,14 +31,15 @@ public class UserController {
     private final JwtTokenUtil jwtTokenUtil;
 
 
-    @GetMapping({"","/"})
-    public ResponseEntity certification(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization){
+    @GetMapping({"", "/"})
+    public ResponseEntity certification(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) {
 
         String username = jwtTokenUtil.getUsernameAuthorization(authorization);
 
         Long usersId = userService.findUsersIdByUsername(username);
-        return new ResponseEntity(new ResponseDto<>(String.valueOf(usersId)),HttpStatus.OK);
+        return new ResponseEntity(new ResponseDto<>(String.valueOf(usersId)), HttpStatus.OK);
     }
+
     @PostMapping("/user")
     public ResponseEntity register(@RequestBody RegisterDto dto) {
         return new ResponseEntity(new ResponseDto<>(userService.register(dto)), HttpStatus.CREATED);
@@ -77,10 +77,9 @@ public class UserController {
         String username = jwtTokenUtil.getUsername(refreshToken);
         String role = jwtTokenUtil.getRole(refreshToken);
 
-        String newAccess = jwtTokenUtil.createJwtWithAccessAndRefresh(ACCESS_TOKEN,  username, role, ACCESS_EXPIRE);
+        String newAccess = jwtTokenUtil.createJwtWithAccessAndRefresh(ACCESS_TOKEN, username, role, ACCESS_EXPIRE);
 
-        String newRefresh = jwtTokenUtil.createJwtWithAccessAndRefresh(REFRESH_TOKEN,  username, role, REFRESH_EXPIRE);
-
+        String newRefresh = jwtTokenUtil.createJwtWithAccessAndRefresh(REFRESH_TOKEN, username, role, REFRESH_EXPIRE);
 
 
         response.setHeader(ACCESS_TOKEN, newAccess);
