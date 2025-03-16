@@ -105,12 +105,12 @@ public class UserController {
                 refreshToken = cookie.getValue();
             }
         }
+        response.addCookie(removeCookie(REFRESH_TOKEN));
         if (refreshToken == null) {
             return new ResponseEntity<>(new ErrorResult("refresh Token이 없습니다"), HttpStatus.BAD_REQUEST);
         }
-
         redisRepository.delete(refreshToken);
-
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 }
