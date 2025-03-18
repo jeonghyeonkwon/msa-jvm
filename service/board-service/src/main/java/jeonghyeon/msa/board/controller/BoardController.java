@@ -13,12 +13,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class BoardController {
 
     private final BoardFacade boardFacade;
 
-    @PostMapping("/users/{userId}/boards")
-    public ResponseEntity createBoard(@PathVariable Long userId, @RequestBody BoardRequest request) {
+    @PostMapping("/user/{userId}/board")
+    public ResponseEntity createBoard(@PathVariable("userId") Long userId, @RequestBody BoardRequest request) {
         Long board = boardFacade.createBoard(userId, request);
         return new ResponseEntity(board, HttpStatus.CREATED);
     }
@@ -30,13 +31,13 @@ public class BoardController {
     }
 
     @GetMapping("/boards/{boardId}")
-    public ResponseEntity getBoardDetail(@PathVariable Long boardId) {
+    public ResponseEntity getBoardDetail(@PathVariable("boardId") Long boardId) {
         BoardDetailResponse board = boardFacade.getBoardDetail(boardId);
         return new ResponseEntity(board, HttpStatus.OK);
     }
 
     @GetMapping("/boards/{boardId}/comments")
-    public ResponseEntity getComments(@PathVariable Long boardId, Pageable pageable) {
+    public ResponseEntity getComments(@PathVariable("boardId") Long boardId, Pageable pageable) {
         PageResponse comments = boardFacade.getComments(boardId, pageable);
         return new ResponseEntity(comments, HttpStatus.OK);
     }
