@@ -7,7 +7,7 @@ import jeonghyeon.msa.board.domain.Comment;
 import jeonghyeon.msa.board.domain.Users;
 import jeonghyeon.msa.board.dto.request.BoardRequest;
 import jeonghyeon.msa.board.dto.request.CommentRequest;
-import jeonghyeon.msa.board.dto.request.UsersRequest;
+import jeonghyeon.msa.board.dto.response.UsersResponse;
 import jeonghyeon.msa.board.dto.response.BoardDetailResponse;
 import jeonghyeon.msa.board.dto.response.BoardResponse;
 import jeonghyeon.msa.board.dto.response.CommentResponse;
@@ -46,23 +46,9 @@ public class BoardService {
         }
     }
 
-    @Transactional
-    public void createUser(UsersRequest request) {
-        usersRepository.findById(request.getUsersId()).ifPresent(
-                notUsed -> {
-                    throw new IllegalArgumentException("이미 가입된 회원입니다");
-                }
-        );
-        usersRepository.save(new Users(request.getUsersId(), request.getUsername()));
-    }
 
     @Transactional
-    public Long createBoard(Long usersId, BoardRequest request) {
-
-        Users users = usersRepository.findById(usersId)
-                .orElseThrow(
-                        () -> new IllegalArgumentException("잘못된 접근 입니다.")
-                );
+    public Long createBoard(Users users, BoardRequest request) {
 
         Board board = new Board(snowflake.nextId(), request.getTitle(), request.getContent(), BoardStatus.NORMAL, users);
         Board savedBoard = boardRepository.save(board);

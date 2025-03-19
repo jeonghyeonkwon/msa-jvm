@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jeonghyeon.msa.auth.dto.request.RegisterDto;
 import jeonghyeon.msa.auth.dto.response.ResponseDto;
+import jeonghyeon.msa.auth.dto.response.UserInfoResponse;
 import jeonghyeon.msa.auth.exception.ErrorResult;
 import jeonghyeon.msa.auth.security.JwtTokenUtil;
 import jeonghyeon.msa.auth.security.RedisRepository;
@@ -43,6 +44,13 @@ public class UserController {
     @PostMapping("/user")
     public ResponseEntity register(@RequestBody RegisterDto dto) {
         return new ResponseEntity(new ResponseDto<>(userService.register(dto)), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/users/{usersId}")
+    public ResponseEntity userInfo(@PathVariable("usersId") Long usersId) {
+        UserInfoResponse dto = userService.findByUsersId(usersId);
+
+        return new ResponseEntity(dto, HttpStatus.OK);
     }
 
     @PostMapping("/reissue")

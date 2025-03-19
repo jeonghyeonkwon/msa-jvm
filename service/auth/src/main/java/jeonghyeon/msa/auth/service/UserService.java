@@ -3,6 +3,7 @@ package jeonghyeon.msa.auth.service;
 
 import jeonghyeon.msa.auth.domain.Users;
 import jeonghyeon.msa.auth.dto.request.RegisterDto;
+import jeonghyeon.msa.auth.dto.response.UserInfoResponse;
 import jeonghyeon.msa.auth.kafka.OutboxEventPublisher;
 import jeonghyeon.msa.auth.repository.UserRepository;
 import jeonghyeon.msa.common.Snowflake;
@@ -43,5 +44,9 @@ public class UserService {
 
     public Long findUsersIdByUsername(String username) {
         return usersRepository.findUsersIdByUsername(username);
+    }
+
+    public UserInfoResponse findByUsersId(Long usersId) {
+        return usersRepository.findByUsersId(usersId);
     }
 }

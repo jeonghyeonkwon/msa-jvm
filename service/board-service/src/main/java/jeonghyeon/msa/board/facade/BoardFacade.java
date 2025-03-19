@@ -1,28 +1,51 @@
 package jeonghyeon.msa.board.facade;
 
+import jeonghyeon.msa.board.client.AuthClient;
+import jeonghyeon.msa.board.domain.Users;
 import jeonghyeon.msa.board.dto.request.BoardRequest;
 import jeonghyeon.msa.board.dto.request.CommentRequest;
 import jeonghyeon.msa.board.dto.response.BoardDetailResponse;
 import jeonghyeon.msa.board.dto.response.CommentResponse;
 import jeonghyeon.msa.board.dto.response.PageResponse;
+import jeonghyeon.msa.board.dto.response.UsersResponse;
 import jeonghyeon.msa.board.repository.redis.ViewCountRepository;
 import jeonghyeon.msa.board.service.BoardService;
+import jeonghyeon.msa.board.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
+import static java.util.Objects.isNull;
+
 @Component
 @RequiredArgsConstructor
 public class BoardFacade {
-    private final ViewCountRepository viewCountRepository;
-    private final BoardService boardService;
-
     private static final int BACK_UP_BATCH_SIZE = 100;
 
+    private final ViewCountRepository viewCountRepository;
+    private final BoardService boardService;
+    private final UserService userService;
+    private final AuthClient authClient;
 
+    @Transactional
     public Long createBoard(Long usersId, BoardRequest request) {
-        return boardService.createBoard(usersId, request);
+        Optional<Users> optionalUsers = userService.findByUsersId(usersId);
+
+        if (optionalUsers.isPresent()) {
+            return boardService.createBoard(optionalUsers.get(), request);
+        }
+
+        UsersResponse userInfo = authClient.getUserInfo(usersId);
+        if (isNull(userInfo)) {
+            throw new IllegalArgumentException("잘못된 접근입니다");
+        }
+
+        Users savedUser = userService.createUser(userInfo);
+
+        return boardService.createBoard(savedUser, request);
     }
 
 

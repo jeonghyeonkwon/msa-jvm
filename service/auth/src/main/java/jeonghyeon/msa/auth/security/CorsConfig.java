@@ -17,6 +17,7 @@ public class CorsConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true); // 인증 처리 허용
         config.addAllowedOrigin("http://localhost:3000");
+        config.addAllowedOrigin("http://127.0.0.1:8081");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.addExposedHeader(ACCESS_TOKEN);
