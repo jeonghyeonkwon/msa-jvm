@@ -1,5 +1,6 @@
 package jeonghyeon.msa.board.repository;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jeonghyeon.msa.board.dto.response.CommentResponse;
 import jeonghyeon.msa.board.dto.response.QCommentResponse;
@@ -9,6 +10,8 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static jeonghyeon.msa.board.domain.QBoard.board;
 import static jeonghyeon.msa.board.domain.QComment.comment;
@@ -44,4 +47,17 @@ public class CommentRepositoryCustomImpl implements CommentRepositoryCustom {
                 .fetch();
         return fetch;
     }
+
+    @Override
+    public Map<Long, Long> findCountByBoardIds(List<Long> boardIds) {
+
+        List<Tuple> fetch = jpaQueryFactory.select(comment.board.boardId, comment.board.boardId.count())
+                .from(comment)
+                .where(comment.board.boardId.in(boardIds))
+                .groupBy(comment.board.boardId)
+                .fetch();
+        return fetch.stream().collect(Collectors.toMap(tuple -> tuple.get(0, Long.class), tuple -> tuple.get(1, Long.class)));
+    }
+
+
 }

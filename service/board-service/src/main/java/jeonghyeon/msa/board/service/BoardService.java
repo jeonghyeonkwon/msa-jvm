@@ -26,6 +26,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -96,12 +98,19 @@ public class BoardService {
         Long pageNumber = Long.valueOf(pageable.getPageNumber());
 
         List<BoardResponse> list = boardRepository.findList(pageNumber * pageSize, pageSize);
+
+        List<Long> boardIds = list.stream().map(dto -> Long.valueOf(dto.getBoardId())).collect(Collectors.toList());
+
+        Map<Long, Long> countByBoardIds = commentRepository.findCountByBoardIds(boardIds);
+
+        list.stream().forEach(board -> board.setCommentCount(
+                countByBoardIds.containsKey(board.getBoardId()) ? countByBoardIds.get(board.getBoardId()) : 0L)
+        );
+
         Long count = boardRepository.count(
                 PageLimitCalculator.calculatePageLimit(pageNumber, pageSize, 10L)
         );
         return new PageResponse<BoardResponse>(pageNumber, pageSize, list, count, 10L);
-
-
     }
 
     public PageResponse getComments(Long boardId, Pageable pageable) {
