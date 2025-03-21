@@ -25,9 +25,9 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
     @Override
     public BoardDetailResponse getBoardDetail(Long boardId) {
         return jpaQueryFactory
-                .select(new QBoardDetailResponse(board.boardId, users.username, board.title, board.content))
+                .select(new QBoardDetailResponse(board.boardId, users.username, board.title, board.content,board.createdDate))
                 .from(board)
-                .innerJoin(board.users, users).fetchJoin()
+                .innerJoin(board.users, users)
                 .where(board.boardId.eq(boardId))
                 .fetchOne();
     }
@@ -36,9 +36,9 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
     @Override
     public BoardDetailResponse getBoardDetailAndViewCount(Long boardId) {
         return jpaQueryFactory
-                .select(new QBoardDetailResponse(board.boardId, users.username, board.title, board.content, board.viewCount))
+                .select(new QBoardDetailResponse(board.boardId, users.username, board.title, board.content,board.createdDate ,board.viewCount))
                 .from(board)
-                .innerJoin(board.users, users).fetchJoin()
+                .innerJoin(board.users, users)
                 .where(board.boardId.eq(boardId))
                 .fetchOne();
     }
