@@ -2,7 +2,9 @@ package jeonghyeon.msa.board.controller;
 
 
 import jeonghyeon.msa.board.dto.request.BoardRequest;
+import jeonghyeon.msa.board.dto.request.CommentRequest;
 import jeonghyeon.msa.board.dto.response.BoardDetailResponse;
+import jeonghyeon.msa.board.dto.response.CommentResponse;
 import jeonghyeon.msa.board.dto.response.PageResponse;
 import jeonghyeon.msa.board.facade.BoardFacade;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +20,7 @@ public class BoardController {
 
     private final BoardFacade boardFacade;
 
-    @PostMapping("/user/{userId}/board")
+    @PostMapping("/user/{userId}/boards")
     public ResponseEntity createBoard(@PathVariable("userId") Long userId, @RequestBody BoardRequest request) {
         Long board = boardFacade.createBoard(userId, request);
         return new ResponseEntity(board, HttpStatus.CREATED);
@@ -40,6 +42,14 @@ public class BoardController {
     public ResponseEntity getComments(@PathVariable("boardId") Long boardId, Pageable pageable) {
         PageResponse comments = boardFacade.getComments(boardId, pageable);
         return new ResponseEntity(comments, HttpStatus.OK);
+    }
+
+    @PostMapping("/boards/{boardId}/comments")
+    public ResponseEntity createComment(
+            @PathVariable("boardId") Long boardId,
+            @RequestBody CommentRequest commentRequest) {
+        CommentResponse comment = boardFacade.createComment(boardId, commentRequest);
+        return new ResponseEntity(comment, HttpStatus.CREATED);
     }
 
 }

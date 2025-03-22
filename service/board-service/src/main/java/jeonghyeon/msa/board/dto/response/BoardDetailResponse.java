@@ -1,6 +1,7 @@
 package jeonghyeon.msa.board.dto.response;
 
 import com.querydsl.core.annotations.QueryProjection;
+import jeonghyeon.msa.board.util.DateFormatter;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -9,7 +10,7 @@ import java.util.List;
 
 @Data
 public class BoardDetailResponse {
-    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
     private Long boardId;
     private String username;
     private String title;
@@ -24,7 +25,7 @@ public class BoardDetailResponse {
         this.username = username;
         this.title = title;
         this.content = content;
-        this.createdAt = createdAt.format(formatter);
+        this.createdAt = DateFormatter.toStringByLocalDateTime(createdAt);
     }
 
     @QueryProjection
@@ -35,7 +36,7 @@ public class BoardDetailResponse {
         this.title = title;
         this.content = content;
         this.viewCount = viewCount;
-        this.createdAt = createdAt.format(formatter);
+        this.createdAt = DateFormatter.toStringByLocalDateTime(createdAt);
     }
 
     public Long increaseViewCount() {

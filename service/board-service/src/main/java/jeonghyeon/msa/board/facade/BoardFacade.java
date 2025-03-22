@@ -49,8 +49,8 @@ public class BoardFacade {
     }
 
 
-    public CommentResponse createComment(Long usersId, Long boardId, CommentRequest request) {
-        return boardService.createComment(usersId, boardId, request);
+    public CommentResponse createComment( Long boardId, CommentRequest request) {
+        return boardService.createComment( boardId, request);
     }
 
 

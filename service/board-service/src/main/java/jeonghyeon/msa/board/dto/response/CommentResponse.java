@@ -1,24 +1,25 @@
 package jeonghyeon.msa.board.dto.response;
 
 import com.querydsl.core.annotations.QueryProjection;
+import jeonghyeon.msa.board.util.DateFormatter;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
 public class CommentResponse {
-    private Long commentId;
-    private Long usersId;
+    private String commentId;
+    private String usersId;
     private String username;
     private String content;
-    private LocalDateTime createdDate;
+    private String createdDate;
 
     @QueryProjection
     public CommentResponse(Long commentId, Long usersId, String username, String content, LocalDateTime createdDate) {
-        this.commentId = commentId;
-        this.usersId = usersId;
+        this.commentId = commentId.toString();
+        this.usersId = usersId.toString();
         this.username = username;
         this.content = content;
-        this.createdDate = createdDate;
+        this.createdDate = DateFormatter.toStringByLocalDateTime(createdDate);
     }
 }

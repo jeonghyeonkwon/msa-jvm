@@ -59,8 +59,8 @@ public class BoardService {
     }
 
     @Transactional
-    public CommentResponse createComment(Long usersId, Long boardId, CommentRequest request) {
-        Users users = usersRepository.findById(usersId)
+    public CommentResponse createComment(Long boardId, CommentRequest request) {
+        Users users = usersRepository.findById(request.getUsersId())
                 .orElseThrow(
                         () -> new IllegalArgumentException("잘못된 접근 입니다.")
                 );
@@ -72,7 +72,7 @@ public class BoardService {
         Comment savedComment = commentRepository.save(new Comment(snowflake.nextId(), request.getContent(), users, board));
 
         return new CommentResponse(
-                savedComment.getCommentId(), usersId, users.getUsername(), savedComment.getContent(), savedComment.getCreatedDate()
+                savedComment.getCommentId(), request.getUsersId(), users.getUsername(), savedComment.getContent(), savedComment.getCreatedDate()
         );
     }
 

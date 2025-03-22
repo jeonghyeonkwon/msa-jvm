@@ -34,6 +34,7 @@ public class Board extends BaseTimeEntity {
 
 
     public Board(Long boardId, String title, String content, BoardStatus boardStatus, Users users) {
+        validate(title, content);
         users.createBoard(this);
         this.boardId = boardId;
         this.title = title;
@@ -42,6 +43,16 @@ public class Board extends BaseTimeEntity {
         this.users = users;
         this.viewCount = 0L;
     }
+
+    private void validate(String title, String content) {
+        isBlank(title);
+        isBlank(content);
+    }
+
+    private void isBlank(String text) {
+        if (text == null || text.isBlank()) throw new IllegalArgumentException("빈 값을 넣을 수 없습니다.");
+    }
+
 
     public void updateViewCount(Long viewCount) {
         this.viewCount = viewCount;

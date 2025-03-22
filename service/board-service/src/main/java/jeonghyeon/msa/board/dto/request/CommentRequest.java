@@ -4,5 +4,6 @@ import lombok.Data;
 
 @Data
 public class CommentRequest {
+    private Long usersId;
     private String content;
 }

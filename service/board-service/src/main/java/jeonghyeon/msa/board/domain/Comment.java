@@ -26,11 +26,16 @@ public class Comment extends BaseTimeEntity {
     private Board board;
 
     public Comment(Long commentId, String content, Users users, Board board) {
+        isBlank(content);
         users.createComment(this);
         board.createComment(this);
         this.commentId = commentId;
         this.content = content;
         this.users = users;
         this.board = board;
+    }
+
+    private void isBlank(String content) {
+        if (content == null || content.isBlank()) throw new IllegalArgumentException("빈 값을 넣을 수 없습니다.");
     }
 }
