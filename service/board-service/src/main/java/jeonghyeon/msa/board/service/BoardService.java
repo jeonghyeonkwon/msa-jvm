@@ -7,7 +7,6 @@ import jeonghyeon.msa.board.domain.Comment;
 import jeonghyeon.msa.board.domain.Users;
 import jeonghyeon.msa.board.dto.request.BoardRequest;
 import jeonghyeon.msa.board.dto.request.CommentRequest;
-import jeonghyeon.msa.board.dto.response.UsersResponse;
 import jeonghyeon.msa.board.dto.response.BoardDetailResponse;
 import jeonghyeon.msa.board.dto.response.BoardResponse;
 import jeonghyeon.msa.board.dto.response.CommentResponse;
@@ -21,6 +20,7 @@ import jeonghyeon.msa.common.Snowflake;
 import jeonghyeon.msa.common.event.Event;
 import jeonghyeon.msa.common.event.EventPayload;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class BoardService {
     private final UsersRepository usersRepository;
     private final BoardRepository boardRepository;
@@ -93,7 +94,7 @@ public class BoardService {
         boardRepository.updateViewCount(boardId, count);
     }
 
-    public PageResponse getBoards(Pageable pageable) {
+    public PageResponse getBoards(Pageable pageable, Long pageBlock) {
         Long pageSize = Long.valueOf(pageable.getPageSize());
         Long pageNumber = Long.valueOf(pageable.getPageNumber());
 
@@ -108,19 +109,25 @@ public class BoardService {
         );
 
         Long count = boardRepository.count(
-                PageLimitCalculator.calculatePageLimit(pageNumber, pageSize, 10L)
+                PageLimitCalculator.calculatePageLimit(pageNumber, pageSize, pageBlock)
         );
-        return new PageResponse<BoardResponse>(pageNumber, pageSize, list, count, 10L);
+        return new PageResponse<BoardResponse>(pageNumber, pageSize, list, count, pageBlock);
     }
 
-    public PageResponse getComments(Long boardId, Pageable pageable) {
+    public PageResponse getComments(Long boardId, Pageable pageable, Long pageBlock) {
         Long pageSize = Long.valueOf(pageable.getPageSize());
         Long pageNumber = Long.valueOf(pageable.getPageNumber());
 
+        log.info("boardId={}", boardId);
+        log.info("pageSize={}", pageSize);
+        log.info("pageNumber={}", pageNumber);
+        log.info("pageBlock={}", pageBlock);
         List<CommentResponse> list = commentRepository.findList(boardId, pageNumber * pageSize, pageSize);
-        Long count = boardRepository.count(
-                PageLimitCalculator.calculatePageLimit(pageNumber, pageSize, 10L)
+
+        Long count = commentRepository.count(
+                boardId, PageLimitCalculator.calculatePageLimit(pageNumber, pageSize, pageBlock)
         );
-        return new PageResponse<CommentResponse>(pageNumber, pageSize, list, count, 10L);
+        log.info("count={}", count);
+        return new PageResponse<CommentResponse>(pageNumber, pageSize, list, count, pageBlock);
     }
 }

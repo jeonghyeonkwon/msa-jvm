@@ -49,8 +49,8 @@ public class BoardFacade {
     }
 
 
-    public CommentResponse createComment( Long boardId, CommentRequest request) {
-        return boardService.createComment( boardId, request);
+    public CommentResponse createComment(Long boardId, CommentRequest request) {
+        return boardService.createComment(boardId, request);
     }
 
 
@@ -81,11 +81,11 @@ public class BoardFacade {
 
     }
 
-    public PageResponse getBoards(Pageable pageable) {
-        return boardService.getBoards(pageable);
+    public PageResponse getBoards(Pageable pageable, Long pageBlock) {
+        return boardService.getBoards(pageable, pageBlock);
     }
 
-    public PageResponse getComments(Long boardId, Pageable pageable) {
-        return boardService.getComments(boardId, pageable);
+    public PageResponse getComments(Long boardId, Pageable pageable, Long pageBlock) {
+        return boardService.getComments(boardId, pageable, pageBlock);
     }
 }

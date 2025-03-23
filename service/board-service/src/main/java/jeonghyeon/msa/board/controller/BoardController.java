@@ -27,8 +27,8 @@ public class BoardController {
     }
 
     @GetMapping("/boards")
-    public ResponseEntity getBoards(Pageable pageable) {
-        PageResponse boards = boardFacade.getBoards(pageable);
+    public ResponseEntity getBoards(Pageable pageable, @RequestParam(value = "pageBlock", defaultValue = "10") Long pageBlock) {
+        PageResponse boards = boardFacade.getBoards(pageable, pageBlock);
         return new ResponseEntity(boards, HttpStatus.OK);
     }
 
@@ -39,15 +39,17 @@ public class BoardController {
     }
 
     @GetMapping("/boards/{boardId}/comments")
-    public ResponseEntity getComments(@PathVariable("boardId") Long boardId, Pageable pageable) {
-        PageResponse comments = boardFacade.getComments(boardId, pageable);
+    public ResponseEntity getComments(@PathVariable("boardId") Long boardId, Pageable pageable, @RequestParam(value = "pageBlock", defaultValue = "10") Long pageBlock) {
+        PageResponse comments = boardFacade.getComments(boardId, pageable,pageBlock);
         return new ResponseEntity(comments, HttpStatus.OK);
     }
 
     @PostMapping("/boards/{boardId}/comments")
     public ResponseEntity createComment(
             @PathVariable("boardId") Long boardId,
-            @RequestBody CommentRequest commentRequest) {
+            @RequestBody CommentRequest commentRequest
+
+    ) {
         CommentResponse comment = boardFacade.createComment(boardId, commentRequest);
         return new ResponseEntity(comment, HttpStatus.CREATED);
     }

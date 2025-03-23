@@ -29,7 +29,7 @@ public class CommentRepositoryCustomImpl implements CommentRepositoryCustom {
         List<Long> ids = jpaQueryFactory.select(comment.commentId)
                 .from(comment)
                 .where(comment.board.boardId.eq(boardId))
-                .orderBy(board.boardId.desc())
+                .orderBy(comment.commentId.desc())
                 .offset(offset)
                 .limit(limit)
                 .fetch();
