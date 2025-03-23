@@ -11,7 +11,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long>, Comment
 
     @Query(
             value = "SELECT COUNT(*) FROM (" +
-                    "   SELECT comment_id FROM comment where comment.board_id = :boardId LIMIT :limit" +
+                    "   SELECT comment_id FROM comment WHERE comment.board_id = :boardId AND comment.parent_id IS NULL LIMIT :limit" +
                     ") T",
             nativeQuery = true)
     Long count(@Param("boardId") Long boardId, @Param("limit") Long limit);

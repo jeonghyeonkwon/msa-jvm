@@ -70,6 +70,16 @@ public class BoardService {
                         () -> new IllegalArgumentException("잘못된 접근 입니다.")
                 );
 
+        if (request.getParentId() != null && request.getParentId() != 0L) {
+            Comment parentComment = commentRepository.findById(request.getParentId())
+                    .orElseThrow(
+                            () -> new IllegalArgumentException("잘못된 접근 입니다.")
+                    );
+            Comment savedComment = commentRepository.save(new Comment(snowflake.nextId(), request.getContent(), users, board, parentComment));
+            return new CommentResponse(savedComment.getCommentId(), parentComment.getCommentId(), users.getUsername(), savedComment.getContent(), savedComment.getCreatedDate());
+        }
+
+
         Comment savedComment = commentRepository.save(new Comment(snowflake.nextId(), request.getContent(), users, board));
 
         return new CommentResponse(

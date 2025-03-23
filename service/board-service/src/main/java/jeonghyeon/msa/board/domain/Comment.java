@@ -6,6 +6,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Entity
 @Table(name = "comment")
@@ -25,6 +28,15 @@ public class Comment extends BaseTimeEntity {
     @JoinColumn(name = "board_id")
     private Board board;
 
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private Comment parent;
+
+    @OneToMany(mappedBy = "parent")
+    private List<Comment> replies = new ArrayList<>();
+
+
     public Comment(Long commentId, String content, Users users, Board board) {
         isBlank(content);
         users.createComment(this);
@@ -33,6 +45,16 @@ public class Comment extends BaseTimeEntity {
         this.content = content;
         this.users = users;
         this.board = board;
+    }
+
+    public Comment(Long commentId, String content, Users users, Board board, Comment parentComment) {
+        this(commentId, content, users, board);
+        this.parent = parentComment;
+        parentComment.createReplies(this);
+    }
+
+    private void createReplies(Comment comment) {
+        this.replies.add(comment);
     }
 
     private void isBlank(String content) {
