@@ -5,6 +5,8 @@ import jeonghyeon.msa.board.util.DateFormatter;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class CommentResponse {
@@ -14,6 +16,7 @@ public class CommentResponse {
     private String username;
     private String content;
     private String createdDate;
+    private List<CommentResponse> replies;
 
     @QueryProjection
     public CommentResponse(Long commentId, Long usersId, String username, String content, LocalDateTime createdDate) {
@@ -22,6 +25,7 @@ public class CommentResponse {
         this.username = username;
         this.content = content;
         this.createdDate = DateFormatter.toStringByLocalDateTime(createdDate);
+
     }
 
     @QueryProjection
@@ -33,4 +37,5 @@ public class CommentResponse {
         this.content = content;
         this.createdDate = DateFormatter.toStringByLocalDateTime(createdDate);
     }
+
 }

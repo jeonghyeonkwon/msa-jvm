@@ -8,5 +8,7 @@ import java.util.Map;
 public interface CommentRepositoryCustom {
     List<CommentResponse> findList(Long boardId, Long offset, Long limit);
 
-    Map<Long,Long> findCountByBoardIds(List<Long> boardIds);
+    Map<Long, Long> findCountByBoardIds(List<Long> boardIds);
+
+    List<CommentResponse> findRepliesByParentIds(List<Long> parentsId);
 }

@@ -59,5 +59,14 @@ public class CommentRepositoryCustomImpl implements CommentRepositoryCustom {
         return fetch.stream().collect(Collectors.toMap(tuple -> tuple.get(0, Long.class), tuple -> tuple.get(1, Long.class)));
     }
 
+    @Override
+    public List<CommentResponse> findRepliesByParentIds(List<Long> parentsId) {
+        return jpaQueryFactory.select(new QCommentResponse(comment.commentId, comment.parent.commentId, users.usersId, users.username, comment.content, comment.createdDate))
+                .from(comment)
+                .innerJoin(comment.users, users)
+                .where(comment.parent.commentId.in(parentsId))
+                .orderBy(comment.commentId.asc()).fetch();
+    }
+
 
 }
