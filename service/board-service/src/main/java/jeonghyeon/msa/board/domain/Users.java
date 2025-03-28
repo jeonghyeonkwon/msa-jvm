@@ -26,6 +26,11 @@ public class Users extends BaseTimeEntity {
     @OneToMany(mappedBy = "users")
     private List<Comment> comments = new ArrayList<>();
 
+
+    @OneToMany(mappedBy = "users")
+    private List<BoardLike> boardLikes = new ArrayList<>();
+
+
     public Users(Long usersId, String username) {
         this.usersId = usersId;
         this.username = username;
@@ -37,5 +42,9 @@ public class Users extends BaseTimeEntity {
 
     protected void createComment(Comment comment) {
         this.comments.add(comment);
+    }
+
+    public void createLike(BoardLike boardLike) {
+        this.boardLikes.add(boardLike);
     }
 }

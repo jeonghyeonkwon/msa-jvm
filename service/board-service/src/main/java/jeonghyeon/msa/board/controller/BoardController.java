@@ -40,7 +40,7 @@ public class BoardController {
 
     @GetMapping("/boards/{boardId}/comments")
     public ResponseEntity getComments(@PathVariable("boardId") Long boardId, Pageable pageable, @RequestParam(value = "pageBlock", defaultValue = "10") Long pageBlock) {
-        PageResponse comments = boardFacade.getComments(boardId, pageable,pageBlock);
+        PageResponse comments = boardFacade.getComments(boardId, pageable, pageBlock);
         return new ResponseEntity(comments, HttpStatus.OK);
     }
 
@@ -52,6 +52,25 @@ public class BoardController {
     ) {
         CommentResponse comment = boardFacade.createComment(boardId, commentRequest);
         return new ResponseEntity(comment, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/boards/{boardId}/like")
+    public ResponseEntity createLike(
+            @PathVariable("boardId") Long boardId,
+            @RequestBody Long usersId
+    ) {
+        boardFacade.createLike(boardId, usersId);
+        return new ResponseEntity(HttpStatus.CREATED);
+    }
+
+
+    @DeleteMapping("/boards/{boardId}/like")
+    public ResponseEntity removeLike(
+            @PathVariable("boardId") Long boardId,
+            @RequestBody Long usersId
+    ) {
+        boardFacade.removeLike(boardId, usersId);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
 }

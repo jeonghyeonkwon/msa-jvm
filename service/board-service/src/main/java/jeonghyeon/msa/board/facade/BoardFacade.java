@@ -88,4 +88,12 @@ public class BoardFacade {
     public PageResponse getComments(Long boardId, Pageable pageable, Long pageBlock) {
         return boardService.getComments(boardId, pageable, pageBlock);
     }
+
+    public void createLike(Long boardId, Long usersId) {
+        boardService.createLike(boardId, usersId);
+    }
+
+    public void removeLike(Long boardId, Long usersId) {
+        boardService.removeLike(boardId, usersId);
+    }
 }

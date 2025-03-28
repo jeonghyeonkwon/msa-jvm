@@ -27,10 +27,16 @@ public class Board extends BaseTimeEntity {
     @OneToMany(mappedBy = "board")
     private List<Comment> comments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "board")
+    private List<BoardLike> boardLikes = new ArrayList<>();
+
     @Enumerated(EnumType.STRING)
     private BoardStatus boardStatus;
 
     private Long viewCount;
+
+    @Version
+    private Long likeCount;
 
 
     public Board(Long boardId, String title, String content, BoardStatus boardStatus, Users users) {
@@ -42,6 +48,7 @@ public class Board extends BaseTimeEntity {
         this.boardStatus = boardStatus;
         this.users = users;
         this.viewCount = 0L;
+        this.likeCount = 0L;
     }
 
     private void validate(String title, String content) {
@@ -53,14 +60,20 @@ public class Board extends BaseTimeEntity {
         if (text == null || text.isBlank()) throw new IllegalArgumentException("빈 값을 넣을 수 없습니다.");
     }
 
-
-    public void updateViewCount(Long viewCount) {
-        this.viewCount = viewCount;
-    }
-
     protected void createComment(Comment comment) {
         this.comments.add(comment);
     }
 
 
+    public void createLike(BoardLike boardLike) {
+        this.boardLikes.add(boardLike);
+    }
+
+    public void addLikeCount() {
+        this.likeCount++;
+    }
+
+    public void minusLikeCount() {
+        this.likeCount--;
+    }
 }

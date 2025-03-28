@@ -1,10 +1,7 @@
 package jeonghyeon.msa.board.service;
 
 
-import jeonghyeon.msa.board.domain.Board;
-import jeonghyeon.msa.board.domain.BoardStatus;
-import jeonghyeon.msa.board.domain.Comment;
-import jeonghyeon.msa.board.domain.Users;
+import jeonghyeon.msa.board.domain.*;
 import jeonghyeon.msa.board.dto.request.BoardRequest;
 import jeonghyeon.msa.board.dto.request.CommentRequest;
 import jeonghyeon.msa.board.dto.response.BoardDetailResponse;
@@ -12,6 +9,7 @@ import jeonghyeon.msa.board.dto.response.BoardResponse;
 import jeonghyeon.msa.board.dto.response.CommentResponse;
 import jeonghyeon.msa.board.dto.response.PageResponse;
 import jeonghyeon.msa.board.kafka.handle.EventHandler;
+import jeonghyeon.msa.board.repository.BoardLikeRepository;
 import jeonghyeon.msa.board.repository.BoardRepository;
 import jeonghyeon.msa.board.repository.CommentRepository;
 import jeonghyeon.msa.board.repository.UsersRepository;
@@ -38,6 +36,7 @@ public class BoardService {
     private final UsersRepository usersRepository;
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
+    private final BoardLikeRepository boardLikeRepository;
     private final Snowflake snowflake = new Snowflake();
     private final List<EventHandler> eventHandlers;
 
@@ -53,7 +52,6 @@ public class BoardService {
 
     @Transactional
     public Long createBoard(Users users, BoardRequest request) {
-
         Board board = new Board(snowflake.nextId(), request.getTitle(), request.getContent(), BoardStatus.NORMAL, users);
         Board savedBoard = boardRepository.save(board);
 
@@ -149,4 +147,33 @@ public class BoardService {
         log.info("count={}", count);
         return new PageResponse<CommentResponse>(pageNumber, pageSize, parents, count, pageBlock);
     }
+
+    @Transactional
+    public void createLike(Long boardId, Long usersId) {
+        Users users = usersRepository.findById(usersId).orElseThrow(
+                () -> new IllegalArgumentException("잘못된 접근 입니다.")
+        );
+
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(
+                        () -> new IllegalArgumentException("잘못된 접근 입니다.")
+                );
+
+        BoardLike boardLike = new BoardLike(snowflake.nextId(), users, board);
+        boardLikeRepository.save(boardLike);
+        board.addLikeCount();
+    }
+
+    @Transactional
+    public void removeLike(Long boardId, Long usersId) {
+
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(
+                        () -> new IllegalArgumentException("잘못된 접근 입니다.")
+                );
+
+        boardLikeRepository.findByBoardIdAndUsersId(boardId,usersId);
+        board.minusLikeCount();
+    }
+
 }

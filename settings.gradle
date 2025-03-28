@@ -9,5 +9,6 @@ include 'service'
 
 include 'service:auth'
 include 'service:memo-service'
+include 'service:memo-batch'
 include 'service:board-service'
 include 'service:msa-gateway'
