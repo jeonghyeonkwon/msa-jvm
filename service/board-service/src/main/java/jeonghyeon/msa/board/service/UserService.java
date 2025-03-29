@@ -26,8 +26,13 @@ public class UserService {
     }
 
     @Transactional
-    public Optional<Users> findByUsersId(Long usersId){
+    public Optional<Users> findByUsersId(Long usersId) {
         return usersRepository.findById(usersId);
     }
 
+    public Users findByUsername(String username) {
+        return usersRepository.findByUsername(username).orElseThrow(
+                () -> new IllegalArgumentException("유저 없음")
+        );
+    }
 }

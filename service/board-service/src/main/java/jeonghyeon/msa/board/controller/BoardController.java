@@ -1,6 +1,8 @@
 package jeonghyeon.msa.board.controller;
 
 
+import jeonghyeon.msa.board.context.UserContext;
+import jeonghyeon.msa.board.domain.Users;
 import jeonghyeon.msa.board.dto.request.BoardRequest;
 import jeonghyeon.msa.board.dto.request.CommentRequest;
 import jeonghyeon.msa.board.dto.response.BoardDetailResponse;
@@ -34,6 +36,8 @@ public class BoardController {
 
     @GetMapping("/boards/{boardId}")
     public ResponseEntity getBoardDetail(@PathVariable("boardId") Long boardId) {
+        Users currentUser = UserContext.getCurrentUser();
+        System.out.println(currentUser.getUsername());
         BoardDetailResponse board = boardFacade.getBoardDetail(boardId);
         return new ResponseEntity(board, HttpStatus.OK);
     }
