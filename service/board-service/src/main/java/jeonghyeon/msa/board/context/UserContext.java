@@ -13,6 +13,10 @@ public class UserContext {
         return currentUser.get();
     }
 
+    public static boolean isExistUser() {
+        return currentUser.get() != null;
+    }
+
     public static void clear() {
         currentUser.remove();
     }

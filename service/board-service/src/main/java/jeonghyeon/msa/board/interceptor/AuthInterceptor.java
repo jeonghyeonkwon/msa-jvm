@@ -8,6 +8,7 @@ import jeonghyeon.msa.board.service.UserService;
 import jeonghyeon.msa.board.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,10 +23,13 @@ public class AuthInterceptor implements HandlerInterceptor {
         try{
             String token = request.getHeader(HttpHeaders.AUTHORIZATION);
             String username = jwtUtil.getUsername(token);
-            Users users = userService.findByUsername(username);
-            UserContext.setCurrentUser(users);
+//            Users users = userService.findByUsername(username);
+//            UserContext.setCurrentUser(users);
+
+
         }catch (Exception e){
             e.printStackTrace();
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
         }
         return true;
     }
@@ -33,6 +37,6 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        UserContext.clear();;
+//        UserContext.clear();;
     }
 }

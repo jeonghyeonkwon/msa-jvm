@@ -1,10 +1,12 @@
 package jeonghyeon.msa.board.controller;
 
 
+import jeonghyeon.msa.board.annotation.AuthUsers;
 import jeonghyeon.msa.board.context.UserContext;
 import jeonghyeon.msa.board.domain.Users;
 import jeonghyeon.msa.board.dto.request.BoardRequest;
 import jeonghyeon.msa.board.dto.request.CommentRequest;
+import jeonghyeon.msa.board.dto.request.UsersRequest;
 import jeonghyeon.msa.board.dto.response.BoardDetailResponse;
 import jeonghyeon.msa.board.dto.response.CommentResponse;
 import jeonghyeon.msa.board.dto.response.PageResponse;
@@ -35,9 +37,9 @@ public class BoardController {
     }
 
     @GetMapping("/boards/{boardId}")
+    @AuthUsers
     public ResponseEntity getBoardDetail(@PathVariable("boardId") Long boardId) {
-        Users currentUser = UserContext.getCurrentUser();
-        System.out.println(currentUser.getUsername());
+
         BoardDetailResponse board = boardFacade.getBoardDetail(boardId);
         return new ResponseEntity(board, HttpStatus.OK);
     }
@@ -61,9 +63,9 @@ public class BoardController {
     @PostMapping("/boards/{boardId}/like")
     public ResponseEntity createLike(
             @PathVariable("boardId") Long boardId,
-            @RequestBody Long usersId
+            @RequestBody UsersRequest request
     ) {
-        boardFacade.createLike(boardId, usersId);
+        boardFacade.createLike(boardId, request.getUsersId());
         return new ResponseEntity(HttpStatus.CREATED);
     }
 
@@ -71,9 +73,9 @@ public class BoardController {
     @DeleteMapping("/boards/{boardId}/like")
     public ResponseEntity removeLike(
             @PathVariable("boardId") Long boardId,
-            @RequestBody Long usersId
+            @RequestBody UsersRequest request
     ) {
-        boardFacade.removeLike(boardId, usersId);
+        boardFacade.removeLike(boardId, request.getUsersId());
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 

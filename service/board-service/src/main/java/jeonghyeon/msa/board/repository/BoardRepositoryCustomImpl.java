@@ -1,6 +1,9 @@
 package jeonghyeon.msa.board.repository;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jeonghyeon.msa.board.context.UserContext;
+import jeonghyeon.msa.board.domain.Users;
 import jeonghyeon.msa.board.dto.response.BoardDetailResponse;
 import jeonghyeon.msa.board.dto.response.BoardResponse;
 import jeonghyeon.msa.board.dto.response.QBoardDetailResponse;
@@ -13,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static jeonghyeon.msa.board.domain.QBoard.board;
+import static jeonghyeon.msa.board.domain.QBoardLike.boardLike;
 import static jeonghyeon.msa.board.domain.QUsers.users;
 
 @Repository
@@ -24,24 +28,61 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 
     @Override
     public BoardDetailResponse getBoardDetail(Long boardId) {
-        return jpaQueryFactory
-                .select(new QBoardDetailResponse(board.boardId, users.username, board.title, board.content,board.createdDate))
+
+        boolean isLikedByUser = false;
+        if (UserContext.isExistUser()) {
+            Users currentUser = UserContext.getCurrentUser();
+            BooleanExpression isLiked = boardLike.users.username.eq(currentUser.getUsername()).and(boardLike.board.boardId.eq(boardId));
+
+            Long likeCount = jpaQueryFactory.select(boardLike.count())
+                    .from(boardLike)
+                    .where(isLiked)
+                    .fetchOne();
+
+            isLikedByUser = likeCount > 0;
+
+        }
+
+        BoardDetailResponse dto = jpaQueryFactory
+                .select(new QBoardDetailResponse(board.boardId, users.username, board.title, board.content, board.createdDate))
                 .from(board)
                 .innerJoin(board.users, users)
                 .where(board.boardId.eq(boardId))
                 .fetchOne();
+
+        dto.setLiked(isLikedByUser);
+
+        return dto;
     }
 
 
     @Override
     public BoardDetailResponse getBoardDetailAndViewCount(Long boardId) {
-        return jpaQueryFactory
-                .select(new QBoardDetailResponse(board.boardId, users.username, board.title, board.content,board.createdDate ,board.viewCount))
+        boolean isLikedByUser = false;
+        if (UserContext.isExistUser()) {
+            Users currentUser = UserContext.getCurrentUser();
+            BooleanExpression isLiked = boardLike.users.username.eq(currentUser.getUsername()).and(boardLike.board.boardId.eq(boardId));
+
+            Long likeCount = jpaQueryFactory.select(boardLike.count())
+                    .from(boardLike)
+                    .where(isLiked)
+                    .fetchOne();
+
+            isLikedByUser = likeCount > 0;
+
+        }
+        BoardDetailResponse dto = jpaQueryFactory
+                .select(new QBoardDetailResponse(board.boardId, users.username, board.title, board.content, board.createdDate, board.viewCount))
                 .from(board)
                 .innerJoin(board.users, users)
                 .where(board.boardId.eq(boardId))
                 .fetchOne();
+
+        dto.setLiked(isLikedByUser);
+
+        return dto;
     }
+
 
     @Override
     public List<BoardResponse> findList(Long offset, Long limit) {

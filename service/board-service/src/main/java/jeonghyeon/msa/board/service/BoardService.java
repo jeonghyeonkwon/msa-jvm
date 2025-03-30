@@ -172,7 +172,8 @@ public class BoardService {
                         () -> new IllegalArgumentException("잘못된 접근 입니다.")
                 );
 
-        boardLikeRepository.findByBoardIdAndUsersId(boardId,usersId);
+        boardLikeRepository.deleteByBoardIdAndUsersId(boardId, usersId);
+
         board.minusLikeCount();
     }
 
