@@ -1,6 +1,7 @@
-package jeonghyeon.msa.auth.kafka;
+package jeonghyeon.msa.board.kafka;
 
 import lombok.RequiredArgsConstructor;
+
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +25,6 @@ import java.util.concurrent.Executors;
 public class KafkaProducerConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
-
 
     @Bean
     public KafkaTemplate<String, String> messageReplayKafkaTemplate() {
@@ -50,4 +50,5 @@ public class KafkaProducerConfig {
     public Executor messageRelayPublishPendingEventExecutor() {
         return Executors.newSingleThreadScheduledExecutor();
     }
+
 }

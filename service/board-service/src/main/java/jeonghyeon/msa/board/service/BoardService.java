@@ -9,6 +9,7 @@ import jeonghyeon.msa.board.dto.response.BoardResponse;
 import jeonghyeon.msa.board.dto.response.CommentResponse;
 import jeonghyeon.msa.board.dto.response.PageResponse;
 import jeonghyeon.msa.board.kafka.handle.EventHandler;
+import jeonghyeon.msa.board.kafka.producer.OutboxEventPublisher;
 import jeonghyeon.msa.board.repository.BoardLikeRepository;
 import jeonghyeon.msa.board.repository.BoardRepository;
 import jeonghyeon.msa.board.repository.CommentRepository;
@@ -17,6 +18,9 @@ import jeonghyeon.msa.board.util.PageLimitCalculator;
 import jeonghyeon.msa.common.Snowflake;
 import jeonghyeon.msa.common.event.Event;
 import jeonghyeon.msa.common.event.EventPayload;
+import jeonghyeon.msa.common.event.EventType;
+import jeonghyeon.msa.common.event.payload.BoardCreateEventPayload;
+import jeonghyeon.msa.common.event.payload.CommentCreateEventPayload;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +41,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
     private final BoardLikeRepository boardLikeRepository;
+    private final OutboxEventPublisher outboxEventPublisher;
     private final Snowflake snowflake = new Snowflake();
     private final List<EventHandler> eventHandlers;
 
@@ -54,6 +59,16 @@ public class BoardService {
     public Long createBoard(Users users, BoardRequest request) {
         Board board = new Board(snowflake.nextId(), request.getTitle(), request.getContent(), BoardStatus.NORMAL, users);
         Board savedBoard = boardRepository.save(board);
+
+        outboxEventPublisher.publish(
+                EventType.BOARD_CREATE,
+                new BoardCreateEventPayload(
+                        savedBoard.getBoardId(),
+                        savedBoard.getTitle(),
+                        users.getUsername(),
+                        savedBoard.getCreatedDate()
+                )
+        );
 
         return savedBoard.getBoardId();
     }
@@ -80,6 +95,11 @@ public class BoardService {
 
 
         Comment savedComment = commentRepository.save(new Comment(snowflake.nextId(), request.getContent(), users, board));
+
+        outboxEventPublisher.publish(
+                EventType.BOARD_COMMENT_CREATE,
+                new CommentCreateEventPayload(boardId)
+        );
 
         return new CommentResponse(
                 savedComment.getCommentId(), request.getUsersId(), users.getUsername(), savedComment.getContent(), savedComment.getCreatedDate()

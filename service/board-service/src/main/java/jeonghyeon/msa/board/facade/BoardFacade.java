@@ -8,9 +8,14 @@ import jeonghyeon.msa.board.dto.response.BoardDetailResponse;
 import jeonghyeon.msa.board.dto.response.CommentResponse;
 import jeonghyeon.msa.board.dto.response.PageResponse;
 import jeonghyeon.msa.board.dto.response.UsersResponse;
+import jeonghyeon.msa.board.kafka.producer.OutboxEventPublisher;
 import jeonghyeon.msa.board.repository.redis.ViewCountRepository;
 import jeonghyeon.msa.board.service.BoardService;
 import jeonghyeon.msa.board.service.UserService;
+import jeonghyeon.msa.common.event.EventType;
+import jeonghyeon.msa.common.event.payload.BoardLikeCreateEventPayload;
+import jeonghyeon.msa.common.event.payload.BoardLikeDeleteEventPayload;
+import jeonghyeon.msa.common.event.payload.BoardViewEventPayload;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -29,6 +34,7 @@ public class BoardFacade {
     private final BoardService boardService;
     private final UserService userService;
     private final AuthClient authClient;
+    private final OutboxEventPublisher outboxEventPublisher;
 
     @Transactional
     public Long createBoard(Long usersId, BoardRequest request) {
@@ -77,6 +83,11 @@ public class BoardFacade {
 
         BoardDetailResponse board = boardService.getBoardDetail(boardId);
         board.setViewCount(viewCount);
+
+        outboxEventPublisher.publish(
+                EventType.BOARD_VIEW,
+                new BoardViewEventPayload(boardId)
+        );
         return board;
 
     }
@@ -91,9 +102,17 @@ public class BoardFacade {
 
     public void createLike(Long boardId, Long usersId) {
         boardService.createLike(boardId, usersId);
+        outboxEventPublisher.publish(
+                EventType.BOARD_LIKE_CREATE,
+                new BoardLikeCreateEventPayload(boardId)
+        );
     }
 
     public void removeLike(Long boardId, Long usersId) {
         boardService.removeLike(boardId, usersId);
+        outboxEventPublisher.publish(
+                EventType.BOARD_LIKE_REMOVE,
+                new BoardLikeDeleteEventPayload(boardId)
+        );
     }
 }

@@ -18,7 +18,7 @@ public class UsersEventConsumer {
     private final BoardService boardService;
 
     @KafkaListener(topics = {
-            EventType.Topic.AUTH_CREATE
+            EventType.Topic.MSA_AUTH
     })
     public void listen(String message, Acknowledgment ack) {
         log.info("[UsersCreateEventConsumer.listen] message = {}", message);

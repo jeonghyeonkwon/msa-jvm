@@ -40,7 +40,7 @@ docker exec -it kafka-jvm bash
 * [x] 게시글 상세
 * [x] 댓글 생성
 * [x] 댓글 리스트
-* [ ] 좋아요 생성, 삭제
+* [x] 좋아요 생성, 삭제
 
 ### memo-batch
 * [ ] 메모 상태 값 변경
