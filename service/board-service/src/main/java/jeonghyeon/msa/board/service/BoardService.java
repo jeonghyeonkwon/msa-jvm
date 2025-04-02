@@ -65,7 +65,7 @@ public class BoardService {
                 new BoardCreateEventPayload(
                         savedBoard.getBoardId(),
                         savedBoard.getTitle(),
-                        users.getUsername(),
+                        users.getUsersId().toString(),
                         savedBoard.getCreatedDate().toString()
                 )
         );

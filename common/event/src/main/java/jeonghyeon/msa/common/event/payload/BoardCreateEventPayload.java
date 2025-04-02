@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class BoardCreateEventPayload implements EventPayload {
     private Long boardId;
     private String title;
-    private String username;
+    private String usersId;
     private static final String TYPE = "create";
     private String createdAt;
 }

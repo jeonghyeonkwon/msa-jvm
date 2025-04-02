@@ -52,3 +52,9 @@ spring:
             - Path=/board-service/**
           filters:
             - RewritePath=/board-service/(?<segment>.*), /$\{segment}
+        - id: hot-board-service
+          uri: http://127.0.0.1:8084
+          predicates:
+            - Path=/popular-posts-service/**
+          filters:
+            - RewritePath=/popular-posts-service/(?<segment>.*), /$\{segment}
