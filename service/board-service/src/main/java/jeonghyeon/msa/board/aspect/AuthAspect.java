@@ -1,6 +1,7 @@
 package jeonghyeon.msa.board.aspect;
 
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jeonghyeon.msa.board.context.UserContext;
@@ -11,10 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
@@ -42,6 +40,11 @@ public class AuthAspect {
             e.printStackTrace();
         }
     }
+
+//    @AfterThrowing("@annotation(jeonghyeon.msa.board.annotation.AuthUsers)")
+//    public void afterThrowing(JoinPoint joinPoint, ExpiredJwtException exception){
+//        response...
+//    }
 
     @After("@annotation(jeonghyeon.msa.board.annotation.AuthUsers)")
     public void afterAuth(JoinPoint joinPoint){

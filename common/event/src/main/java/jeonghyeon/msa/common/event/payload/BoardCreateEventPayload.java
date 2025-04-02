@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 
 @Getter
 @Builder
@@ -17,5 +16,5 @@ public class BoardCreateEventPayload implements EventPayload {
     private String title;
     private String username;
     private static final String TYPE = "create";
-    private LocalDateTime createdAt;
+    private String createdAt;
 }

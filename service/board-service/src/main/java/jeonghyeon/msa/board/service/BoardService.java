@@ -66,7 +66,7 @@ public class BoardService {
                         savedBoard.getBoardId(),
                         savedBoard.getTitle(),
                         users.getUsername(),
-                        savedBoard.getCreatedDate()
+                        savedBoard.getCreatedDate().toString()
                 )
         );
 

@@ -20,7 +20,7 @@ class UsersCreateEventConsumer(
 ) {
 
     @KafkaListener(
-        topics = [EventType.Topic.AUTH_CREATE]
+        topics = [EventType.Topic.MSA_AUTH]
     )
     fun listen(message: String, ack: Acknowledgment) {
         println("[UsersCreateEventConsumer.listen] message=" + message)
