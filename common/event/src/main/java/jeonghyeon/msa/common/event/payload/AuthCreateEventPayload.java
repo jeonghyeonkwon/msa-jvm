@@ -12,6 +12,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthCreateEventPayload implements EventPayload {
-    private Long usersId;
+    private String usersId;
     private String username;
+
+    public AuthCreateEventPayload(Long usersId, String username){
+        this.usersId = usersId.toString();
+        this.username = username;
+    }
 }

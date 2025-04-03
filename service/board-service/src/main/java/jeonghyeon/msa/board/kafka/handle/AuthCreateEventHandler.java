@@ -17,12 +17,12 @@ public class AuthCreateEventHandler implements EventHandler<AuthCreateEventPaylo
     public void handle(Event<AuthCreateEventPayload> event) {
         AuthCreateEventPayload payload = event.getPayload();
 
-        usersRepository.findById(payload.getUsersId()).ifPresent(
+        usersRepository.findById(Long.valueOf(payload.getUsersId())).ifPresent(
                 notUsed -> {
                     throw new IllegalArgumentException("이미 가입된 회원입니다");
                 }
         );
-        usersRepository.save(new Users(payload.getUsersId(), payload.getUsername()));
+        usersRepository.save(new Users(Long.valueOf(payload.getUsersId()), payload.getUsername()));
     }
 
     @Override

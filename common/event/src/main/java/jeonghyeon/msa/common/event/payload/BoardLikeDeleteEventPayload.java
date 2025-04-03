@@ -12,6 +12,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BoardLikeDeleteEventPayload implements EventPayload {
-    private Long boardId;
+    private String boardId;
     private static final String type = "delete";
+
+    public BoardLikeDeleteEventPayload(Long boardId) {
+        this.boardId = boardId.toString();
+    }
 }

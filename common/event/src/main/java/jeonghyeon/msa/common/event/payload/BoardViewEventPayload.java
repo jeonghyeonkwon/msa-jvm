@@ -11,5 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BoardViewEventPayload implements EventPayload {
-    private Long boardId;
+    private String boardId;
+
+    public BoardViewEventPayload(Long boardId) {
+        this.boardId = boardId.toString();
+    }
 }

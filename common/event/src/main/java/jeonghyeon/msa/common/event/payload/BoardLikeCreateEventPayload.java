@@ -12,7 +12,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BoardLikeCreateEventPayload implements EventPayload {
-    private Long boardId;
+    private String boardId;
     private static final String TYPE = "create";
 
+    public BoardLikeCreateEventPayload(Long boardId) {
+        this.boardId = boardId.toString();
+    }
 }
