@@ -15,7 +15,6 @@ public class BoardCreateEventPayload implements EventPayload {
     private String boardId;
     private String title;
     private String usersId;
-    private static final String TYPE = "create";
     private String createdAt;
 
     public BoardCreateEventPayload(Long boardId, String title, Long usersId, String createdAt) {

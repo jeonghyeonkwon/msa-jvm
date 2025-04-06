@@ -16,6 +16,11 @@ services:
     container_name: redis-jvm
     ports:
       - 6379:6379
+  redis-popular:
+    image: redis:7.4.2
+    container_name: redis-popular-jvm
+    ports:
+      - 6380:6379
   kafka:
     image: apache/kafka:3.8.0
     container_name: kafka-jvm

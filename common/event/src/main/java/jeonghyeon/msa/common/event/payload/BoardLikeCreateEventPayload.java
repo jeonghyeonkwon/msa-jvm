@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class BoardLikeCreateEventPayload implements EventPayload {
     private String boardId;
-    private static final String TYPE = "create";
 
     public BoardLikeCreateEventPayload(Long boardId) {
         this.boardId = boardId.toString();

@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CommentCreateEventPayload implements EventPayload {
     private String boardId;
-    private static final String TYPE = "create";
 
     public CommentCreateEventPayload(Long boardId) {
         this.boardId = boardId.toString();

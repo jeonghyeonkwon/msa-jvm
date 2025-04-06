@@ -100,6 +100,7 @@ public class BoardFacade {
         return boardService.getComments(boardId, pageable, pageBlock);
     }
 
+    @Transactional
     public void createLike(Long boardId, Long usersId) {
         boardService.createLike(boardId, usersId);
         outboxEventPublisher.publish(
@@ -108,6 +109,7 @@ public class BoardFacade {
         );
     }
 
+    @Transactional
     public void removeLike(Long boardId, Long usersId) {
         boardService.removeLike(boardId, usersId);
         outboxEventPublisher.publish(
