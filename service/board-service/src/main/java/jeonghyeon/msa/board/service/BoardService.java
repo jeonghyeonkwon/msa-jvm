@@ -4,10 +4,7 @@ package jeonghyeon.msa.board.service;
 import jeonghyeon.msa.board.domain.*;
 import jeonghyeon.msa.board.dto.request.BoardRequest;
 import jeonghyeon.msa.board.dto.request.CommentRequest;
-import jeonghyeon.msa.board.dto.response.BoardDetailResponse;
-import jeonghyeon.msa.board.dto.response.BoardResponse;
-import jeonghyeon.msa.board.dto.response.CommentResponse;
-import jeonghyeon.msa.board.dto.response.PageResponse;
+import jeonghyeon.msa.board.dto.response.*;
 import jeonghyeon.msa.board.kafka.handle.EventHandler;
 import jeonghyeon.msa.board.kafka.producer.OutboxEventPublisher;
 import jeonghyeon.msa.board.repository.BoardLikeRepository;
@@ -108,7 +105,6 @@ public class BoardService {
     @Transactional
     public BoardDetailResponse getBoardDetail(Long boardId) {
         BoardDetailResponse board = boardRepository.getBoardDetail(boardId);
-
         return board;
     }
 
@@ -196,4 +192,7 @@ public class BoardService {
         board.minusLikeCount();
     }
 
+    public BoardPopularPostsResponse getPopularPosts(Long boardId) {
+        return boardRepository.getPopularPosts(boardId);
+    }
 }

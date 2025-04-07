@@ -3,11 +3,9 @@ package jeonghyeon.msa.board.repository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jeonghyeon.msa.board.context.UserContext;
+import jeonghyeon.msa.board.domain.QComment;
 import jeonghyeon.msa.board.domain.Users;
-import jeonghyeon.msa.board.dto.response.BoardDetailResponse;
-import jeonghyeon.msa.board.dto.response.BoardResponse;
-import jeonghyeon.msa.board.dto.response.QBoardDetailResponse;
-import jeonghyeon.msa.board.dto.response.QBoardResponse;
+import jeonghyeon.msa.board.dto.response.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
@@ -17,6 +15,7 @@ import java.util.List;
 
 import static jeonghyeon.msa.board.domain.QBoard.board;
 import static jeonghyeon.msa.board.domain.QBoardLike.boardLike;
+import static jeonghyeon.msa.board.domain.QComment.comment;
 import static jeonghyeon.msa.board.domain.QUsers.users;
 
 @Repository
@@ -79,7 +78,6 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 .fetchOne();
 
         dto.setLiked(isLikedByUser);
-
         return dto;
     }
 
@@ -99,17 +97,38 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
             return new ArrayList<>();
         }
 
-
         List<BoardResponse> fetch = jpaQueryFactory
-                .select(new QBoardResponse(board.boardId, board.title, board.content, users.username, board.createdDate))
+                .select(
+                        new QBoardResponse(
+                                board.boardId,
+                                board.title,
+                                board.content,
+                                users.username,
+                                board.createdDate
+                        )
+                )
                 .from(board)
-                .join(board.users, users)
+                .innerJoin(board.users, users)
                 .where(board.boardId.in(ids))
                 .orderBy(board.boardId.desc())
                 .fetch();
         return fetch;
     }
 
+    @Override
+    public BoardPopularPostsResponse getPopularPosts(Long boardId) {
+        BoardPopularPostsResponse response = jpaQueryFactory
+                .select(
+                        new QBoardPopularPostsResponse(
+                                board.boardId, board.title, comment.count(), board.viewCount, board.likeCount,
+                                users.usersId, board.createdDate)
+                )
+                .from(board)
+                .innerJoin(board.users, users)
+                .leftJoin(board.comments, comment)
+                .where(board.boardId.eq(boardId))
+                .groupBy(comment.board.boardId)
+                .fetchOne();
+        return response;
+    }
 }
-
-

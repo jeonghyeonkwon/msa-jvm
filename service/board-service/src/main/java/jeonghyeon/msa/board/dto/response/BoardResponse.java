@@ -18,7 +18,7 @@ public class BoardResponse {
     private String content;
     private String username;
     private Long commentCount;
-    private String  createdAt;
+    private String createdAt;
 
     @QueryProjection
     public BoardResponse(Long boardId, String title, String content, String username, LocalDateTime createdDate) {

@@ -2,12 +2,11 @@ package jeonghyeon.msa.board.controller;
 
 
 import jeonghyeon.msa.board.annotation.AuthUsers;
-import jeonghyeon.msa.board.context.UserContext;
-import jeonghyeon.msa.board.domain.Users;
 import jeonghyeon.msa.board.dto.request.BoardRequest;
 import jeonghyeon.msa.board.dto.request.CommentRequest;
 import jeonghyeon.msa.board.dto.request.UsersRequest;
 import jeonghyeon.msa.board.dto.response.BoardDetailResponse;
+import jeonghyeon.msa.board.dto.response.BoardPopularPostsResponse;
 import jeonghyeon.msa.board.dto.response.CommentResponse;
 import jeonghyeon.msa.board.dto.response.PageResponse;
 import jeonghyeon.msa.board.facade.BoardFacade;
@@ -77,6 +76,12 @@ public class BoardController {
     ) {
         boardFacade.removeLike(boardId, request.getUsersId());
         return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/popular-posts/{boardId}")
+    public ResponseEntity popularBoard(@PathVariable("boardId") Long boardId) {
+        BoardPopularPostsResponse dto = boardFacade.getPopularPosts(boardId);
+        return new ResponseEntity(dto, HttpStatus.OK);
     }
 
 }

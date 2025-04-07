@@ -4,10 +4,7 @@ import jeonghyeon.msa.board.client.AuthClient;
 import jeonghyeon.msa.board.domain.Users;
 import jeonghyeon.msa.board.dto.request.BoardRequest;
 import jeonghyeon.msa.board.dto.request.CommentRequest;
-import jeonghyeon.msa.board.dto.response.BoardDetailResponse;
-import jeonghyeon.msa.board.dto.response.CommentResponse;
-import jeonghyeon.msa.board.dto.response.PageResponse;
-import jeonghyeon.msa.board.dto.response.UsersResponse;
+import jeonghyeon.msa.board.dto.response.*;
 import jeonghyeon.msa.board.kafka.producer.OutboxEventPublisher;
 import jeonghyeon.msa.board.repository.redis.ViewCountRepository;
 import jeonghyeon.msa.board.service.BoardService;
@@ -116,5 +113,9 @@ public class BoardFacade {
                 EventType.BOARD_LIKE_REMOVE,
                 new BoardLikeDeleteEventPayload(boardId)
         );
+    }
+
+    public BoardPopularPostsResponse getPopularPosts(Long boardId) {
+        return boardService.getPopularPosts(boardId);
     }
 }
