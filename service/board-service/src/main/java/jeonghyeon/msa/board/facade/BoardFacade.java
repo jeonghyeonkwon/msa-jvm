@@ -69,6 +69,10 @@ public class BoardFacade {
             BoardDetailResponse board = boardService.getBoardDetailAndViewCount(boardId);
             Long updateViewCount = board.increaseViewCount();
             viewCountRepository.setIncreaseViewCount(boardId, updateViewCount);
+            outboxEventPublisher.publish(
+                    EventType.BOARD_VIEW,
+                    new BoardViewEventPayload(boardId, board.getCreatedDate())
+            );
             return board;
         }
 
@@ -80,10 +84,9 @@ public class BoardFacade {
 
         BoardDetailResponse board = boardService.getBoardDetail(boardId);
         board.setViewCount(viewCount);
-
         outboxEventPublisher.publish(
                 EventType.BOARD_VIEW,
-                new BoardViewEventPayload(boardId)
+                new BoardViewEventPayload(boardId, board.getCreatedDate())
         );
         return board;
 
@@ -99,19 +102,19 @@ public class BoardFacade {
 
     @Transactional
     public void createLike(Long boardId, Long usersId) {
-        boardService.createLike(boardId, usersId);
+        KafkaResponseDto dto = boardService.createLike(boardId, usersId);
         outboxEventPublisher.publish(
                 EventType.BOARD_LIKE_CREATE,
-                new BoardLikeCreateEventPayload(boardId)
+                new BoardLikeCreateEventPayload(dto.getBoardId(), dto.getBoardCreatedAt())
         );
     }
 
     @Transactional
     public void removeLike(Long boardId, Long usersId) {
-        boardService.removeLike(boardId, usersId);
+        KafkaResponseDto dto = boardService.removeLike(boardId, usersId);
         outboxEventPublisher.publish(
                 EventType.BOARD_LIKE_REMOVE,
-                new BoardLikeDeleteEventPayload(boardId)
+                new BoardLikeDeleteEventPayload(boardId, dto.getBoardCreatedAt())
         );
     }
 

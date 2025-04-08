@@ -88,13 +88,12 @@ public class BoardService {
             Comment savedComment = commentRepository.save(new Comment(snowflake.nextId(), request.getContent(), users, board, parentComment));
             return new CommentResponse(savedComment.getCommentId(), parentComment.getCommentId(), users.getUsersId(), users.getUsername(), savedComment.getContent(), savedComment.getCreatedDate());
         }
-
-
+        
         Comment savedComment = commentRepository.save(new Comment(snowflake.nextId(), request.getContent(), users, board));
 
         outboxEventPublisher.publish(
                 EventType.BOARD_COMMENT_CREATE,
-                new CommentCreateEventPayload(boardId)
+                new CommentCreateEventPayload(boardId, board.getCreatedDate())
         );
 
         return new CommentResponse(
@@ -108,7 +107,7 @@ public class BoardService {
         return board;
     }
 
-
+    @Transactional
     public BoardDetailResponse getBoardDetailAndViewCount(Long boardId) {
         BoardDetailResponse board = boardRepository.getBoardDetailAndViewCount(boardId);
         return board;
@@ -164,7 +163,7 @@ public class BoardService {
     }
 
     @Transactional
-    public void createLike(Long boardId, Long usersId) {
+    public KafkaResponseDto createLike(Long boardId, Long usersId) {
         Users users = usersRepository.findById(usersId).orElseThrow(
                 () -> new IllegalArgumentException("잘못된 접근 입니다.")
         );
@@ -177,10 +176,11 @@ public class BoardService {
         BoardLike boardLike = new BoardLike(snowflake.nextId(), users, board);
         boardLikeRepository.save(boardLike);
         board.addLikeCount();
+        return new KafkaResponseDto(boardId, board.getCreatedDate());
     }
 
     @Transactional
-    public void removeLike(Long boardId, Long usersId) {
+    public KafkaResponseDto removeLike(Long boardId, Long usersId) {
 
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(
@@ -190,6 +190,7 @@ public class BoardService {
         boardLikeRepository.deleteByBoardIdAndUsersId(boardId, usersId);
 
         board.minusLikeCount();
+        return new KafkaResponseDto(boardId, board.getCreatedDate());
     }
 
     public BoardPopularPostsResponse getPopularPosts(Long boardId) {

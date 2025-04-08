@@ -6,14 +6,17 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class BoardViewEventPayload implements EventPayload {
     private String boardId;
-
-    public BoardViewEventPayload(Long boardId) {
+    private String boardCreatedAt;
+    public BoardViewEventPayload(Long boardId, LocalDateTime boardCreated) {
         this.boardId = boardId.toString();
+        this.boardCreatedAt = boardCreated.toString();
     }
 }
