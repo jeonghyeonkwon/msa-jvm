@@ -37,6 +37,7 @@ public class Comment extends BaseTimeEntity {
     private List<Comment> replies = new ArrayList<>();
 
 
+
     public Comment(Long commentId, String content, Users users, Board board) {
         isBlank(content);
         users.createComment(this);

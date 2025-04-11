@@ -88,7 +88,7 @@ public class BoardService {
             Comment savedComment = commentRepository.save(new Comment(snowflake.nextId(), request.getContent(), users, board, parentComment));
             return new CommentResponse(savedComment.getCommentId(), parentComment.getCommentId(), users.getUsersId(), users.getUsername(), savedComment.getContent(), savedComment.getCreatedDate());
         }
-        
+
         Comment savedComment = commentRepository.save(new Comment(snowflake.nextId(), request.getContent(), users, board));
 
         outboxEventPublisher.publish(
