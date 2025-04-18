@@ -17,9 +17,10 @@ import java.util.List;
 public class Board {
 
     @Id
+    @Column(name = "board_id")
     private Long boardId;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "users_id")
     private Users users;
 
@@ -28,9 +29,13 @@ public class Board {
 
     private LocalDateTime createdDate;
 
+    @Column(name = "view_count")
     private Long viewCount;
 
+    @Column(name = "like_count")
     private Long likeCount;
 
+    @Column(name = "popular_check")
+    private Boolean popularCheck;
 
 }

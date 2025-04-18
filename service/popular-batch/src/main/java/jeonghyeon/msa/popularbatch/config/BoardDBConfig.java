@@ -6,6 +6,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -19,6 +21,7 @@ import javax.sql.DataSource;
         entityManagerFactoryRef = "boardEntityManagerFactory",
         transactionManagerRef = "boardTransactionManager"
 )
+@Configuration
 public class BoardDBConfig {
     @Bean(name = "boardDataSource")
     @ConfigurationProperties("spring.datasource-data-board")
@@ -26,6 +29,8 @@ public class BoardDBConfig {
         return DataSourceBuilder.create().build();
     }
 
+
+    @Primary
     @Bean(name = "boardEntityManagerFactory")
     public LocalContainerEntityManagerFactoryBean boardEntityManagerFactory(
             EntityManagerFactoryBuilder builder,
