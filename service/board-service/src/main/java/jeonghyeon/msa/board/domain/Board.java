@@ -38,6 +38,8 @@ public class Board extends BaseTimeEntity {
     @Version
     private Long likeCount;
 
+    private Boolean popularCheck;
+
 
     public Board(Long boardId, String title, String content, BoardStatus boardStatus, Users users) {
         validate(title, content);
@@ -49,6 +51,7 @@ public class Board extends BaseTimeEntity {
         this.users = users;
         this.viewCount = 0L;
         this.likeCount = 0L;
+        this.popularCheck = false;
     }
 
     private void validate(String title, String content) {
